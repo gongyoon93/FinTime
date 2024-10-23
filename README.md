@@ -1,50 +1,34 @@
-# React + TypeScript + Vite
+# FinTime
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+개인 재무 관리 웹 애플리케이션
 
-Currently, two official plugins are available:
+- 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. 수입/지출 내역 관리 :
+   사용자가 수입과 지출을 기록하고, 카테고리별로 구분하여 쉽게 확인할 수 있도록 지원.
+2. 예산 설정 및 모니터링 :
+   월별 예산을 설정하고, 예산 대비 실제 지출을 시각화하여 제공.
+3. 투자 및 자산 관리 :
+   주식, 펀드, 암호화폐 등 사용자가 보유한 자산의 수익률과 변동 사항을 실시간으로 확인 가능.
+4. 지출 분석 및 리포트 :
+   일정 기간 동안의 지출 패턴을 파악할 수 있도록 시각화된 차트와 리포트를 제공.
 
-## Expanding the ESLint configuration
+- 화면별 기획
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. 랜딩 페이지/회원가입/로그인 화면/개인 홈화면
+2. 기능별 화면
+   ...
 
-- Configure the top-level `parserOptions` property like this:
+- 기술 스택 선택
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. React, Typescript, Redux
+2. Styled-Components / Emotion
+3. Axios
+4. React-Query
+5. Webpack
+6. PWA(Progressive Web Application) : 웹 애플리케이션을 네이티브 앱처럼 사용할 수 있게
+   해주는 기술. 오프라인 지원, 푸시 알림, 홈 화면에 앱 추가 등 네이티브에 가까운 사용자 경험 제공 가능.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- 기술적 고려 사항
+  실시간 데이터 업데이트와 빠른 정보 처리가 필수적이며, 금융 데이터의 보안이 중요하므로 데이터 암호화, 안전한 인증(OAuth, JWT), SSL/TLS 등 보안 기술을 필수 적용해야 한다.
+  필수적으로 필요하게 됨.
