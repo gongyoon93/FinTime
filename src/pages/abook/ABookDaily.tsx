@@ -1,5 +1,7 @@
+import { DailyContainer } from "../../styled/abook/ABookDailyStyle";
+
 const ABookDaily = () => {
-  return <>daily</>;
+  return <DailyContainer>Daily</DailyContainer>;
 };
 
 export default ABookDaily;
