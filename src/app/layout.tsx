@@ -25,6 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* pwa 사용을 위한 메타태그와 링크 태그.*/}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      <meta name="theme-color" content="#000000" />
+
+      {/* make sure to provide the name of your icon in below.*/}
+      <link rel="apple-touch-icon" href="/img/icon/icon512_rounded.png" />
+      <link rel="manifest" href="/manifest.json" />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
