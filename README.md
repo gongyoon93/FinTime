@@ -32,3 +32,5 @@
 - React가 아닌 Next.js를 선택한 이유
   가계부와 유사한 기능을 가진 애플리케이션을 만들고 싶었고 이런 경우 페이지가 많아지는 경우 초기 로딩에 대한 성능 최적화가 첫번째로 필요하였고 필요에 따라 특정 페이지를 SEO를 고려하여
   적용할 수 있다는 두번째 이유로 Next.js를 채택하게 되었다.
+
+- app폴더 하위의 RootLayout.tsx은 기본적으로 server component로 이 경우에 meta data를 사용할 수 있고 동시에 useState나 Recoil의 createContext 등을 사용하기 위해서는 'use client' 지시어를 사용해 client component 지정을 해줘야 한다. 예를 들어 RocoilRoot라는 전역 상태 관리를 상위에 Wrapping 하고자 한다면 RootLayout.tsx 이외의 client component 파일을 만들어 Recoil을 감싸고 이 파일을 RootLayout.tsx에 적용한다.
