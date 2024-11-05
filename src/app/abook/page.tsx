@@ -45,6 +45,26 @@ const Abook = () => {
         <WidgetTitle>예산</WidgetTitle>
         <WidgetContent>133</WidgetContent>
       </Widget>
+      <Widget>
+        <WidgetTitle>예산</WidgetTitle>
+        <WidgetContent>133</WidgetContent>
+      </Widget>
+      <Widget>
+        <WidgetTitle>예산</WidgetTitle>
+        <WidgetContent>133</WidgetContent>
+      </Widget>
+      <Widget>
+        <WidgetTitle>예산</WidgetTitle>
+        <WidgetContent>133</WidgetContent>
+      </Widget>
+      <Widget>
+        <WidgetTitle>예산</WidgetTitle>
+        <WidgetContent>133</WidgetContent>
+      </Widget>
+      <Widget>
+        <WidgetTitle>예산</WidgetTitle>
+        <WidgetContent>133</WidgetContent>
+      </Widget>
     </WidgetGrid>
   );
 };

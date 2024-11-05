@@ -13,6 +13,7 @@ const FooterContainer = styled.footer`
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: 4rem;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
 `;
 

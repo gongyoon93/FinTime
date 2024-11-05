@@ -3,7 +3,7 @@
 import { RecoilRoot } from "recoil";
 import styled from "styled-components";
 import Header from "./components/Header";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { GlobalStyle } from "./style/GlobalStyle";
 
@@ -14,12 +14,13 @@ const LayoutContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  display: flex;
-  flex: 1;
+  height: calc(100% - 12rem);
+  padding-top: 7rem; /* Header의 높이만큼 여백 */
+  padding-bottom: 7rem; /* Footer의 높이만큼 여백 */
 `;
 
 const MainContent = styled.main`
-  flex: 1;
+  height: 100%;
   padding: 1rem;
   background-color: #f7fafc;
   overflow-y: auto;
@@ -35,7 +36,7 @@ export default function ClientLayout({
       <LayoutContainer>
         <Header />
         <ContentContainer>
-          <Navbar />
+          {/* <Navbar /> */}
           <MainContent>{children}</MainContent>
         </ContentContainer>
         <Footer />
