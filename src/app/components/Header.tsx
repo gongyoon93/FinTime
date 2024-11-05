@@ -12,9 +12,13 @@ const HeaderContainer = styled.header`
   padding: 1rem;
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  p {
+    font-size: 1.8rem;
+  }
 `;
 
 const MenuButton = styled.button`
+  display: flex;
   background: none;
   border: none;
   cursor: pointer;
@@ -33,7 +37,7 @@ const Header = () => {
       <MenuButton onClick={toggleSidebar} aria-label="Toggle menu">
         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </MenuButton>
-      <h1>가계부</h1>
+      <p>가계부</p>
       <Bell size={24} />
     </HeaderContainer>
   );

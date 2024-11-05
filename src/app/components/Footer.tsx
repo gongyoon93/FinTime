@@ -46,7 +46,7 @@ const Footer = () => {
       </FooterItem>
       <FooterItem href="#">
         <Shield size={20} />
-        차단
+        자산
       </FooterItem>
       <FooterItem href="#">
         <MoreHorizontal size={20} />
