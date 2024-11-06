@@ -6,7 +6,7 @@ const WidgetGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0;
 `;
 
 const Widget = styled.div`

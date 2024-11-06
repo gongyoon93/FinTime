@@ -14,7 +14,7 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 2rem);
   height: 4rem;
   position: fixed;
   top: 0;

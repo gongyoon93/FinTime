@@ -15,12 +15,12 @@ const LayoutContainer = styled.div`
 
 const ContentContainer = styled.div`
   height: calc(100% - 12rem);
-  padding-top: 7rem; /* Header의 높이만큼 여백 */
-  padding-bottom: 7rem; /* Footer의 높이만큼 여백 */
+  padding-top: 6rem; /* Header의 높이만큼 여백 */
+  padding-bottom: 6rem; /* Footer의 높이만큼 여백 */
 `;
 
 const MainContent = styled.main`
-  height: 100%;
+  height: calc(100% - 2rem);
   padding: 1rem;
   background-color: #f7fafc;
   overflow-y: auto;
