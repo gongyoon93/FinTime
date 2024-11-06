@@ -1,4 +1,5 @@
 "use client";
+//client component
 
 import { RecoilRoot } from "recoil";
 import styled from "styled-components";

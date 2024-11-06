@@ -1,3 +1,4 @@
+//server component
 export default function ABookLayout({
   children,
 }: {
