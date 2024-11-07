@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/abook");
+  redirect("/api/auth/signin");
   return <div></div>;
 }

@@ -8,7 +8,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { SessionProvider } from "next-auth/react";
-import AuthCheck from "./AuthCheck";
 import { usePathname } from "next/navigation";
 
 const LayoutContainer = styled.div`
@@ -44,16 +43,14 @@ export default function ClientLayout({
       <SessionProvider>
         {isLoginPage && <>{children}</>}
         {!isLoginPage && (
-          <AuthCheck>
-            <LayoutContainer>
-              <Header />
-              <ContentContainer>
-                {/* <Navbar /> */}
-                <MainContent>{children}</MainContent>
-              </ContentContainer>
-              <Footer />
-            </LayoutContainer>
-          </AuthCheck>
+          <LayoutContainer>
+            <Header />
+            <ContentContainer>
+              {/* <Navbar /> */}
+              <MainContent>{children}</MainContent>
+            </ContentContainer>
+            <Footer />
+          </LayoutContainer>
         )}
         <GlobalStyle />
       </SessionProvider>

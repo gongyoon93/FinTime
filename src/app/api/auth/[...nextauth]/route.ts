@@ -1,28 +1,51 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    // ID, PW 로그인 방식
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: {
+          label: "이메일",
+          type: "text",
+          placeholder: "이메일 주소를 입력해 주세요.",
+        },
+        password: { label: "비밀번호", type: "password" },
+      },
+      //credentials : 로그인 폼에서 입력한 값
+      async authorize(credentials) {
+        //로그인 로직
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/signin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: credentials?.username,
+            password: credentials?.password,
+          }),
+        });
+        const user = await res.json();
+        console.log("$$$user: ", user);
+
+        if (user) {
+          return user;
+        } else {
+          return null;
+        }
+      },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 60, // 30분
-  },
   callbacks: {
-    async session({ session, token, user }) {
-      if (session.user) {
-        session.user.id = user.id;
-      }
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      console.log("$$$ token: ", token);
+      session.user = token as any;
+      console.log("$$$ session: ", session);
       return session;
     },
   },
