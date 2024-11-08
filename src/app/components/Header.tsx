@@ -6,9 +6,11 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 import styled from "styled-components";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -65,6 +67,14 @@ const Header = () => {
     });
   };
 
+  const handleLogout = async () => {
+    await signOut({
+      redirect: false,
+      callbackUrl: "/auth/signin",
+      // signout 이후 signin페이지 이동 처리
+    });
+  };
+
   return (
     <HeaderContainer>
       <TitleContainer>
@@ -77,6 +87,7 @@ const Header = () => {
         <MessageCircle size={24} />
         <Star size={24} />
         <Search size={24} />
+        <LogOut size={24} onClick={() => handleLogout()} />
       </IconContainer>
     </HeaderContainer>
   );

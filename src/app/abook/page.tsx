@@ -1,5 +1,7 @@
 "use client";
 
+// import { getSession } from "next-auth/react";
+// import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const WidgetGrid = styled.div`
@@ -27,6 +29,15 @@ const WidgetContent = styled.div`
 `;
 
 const Abook = () => {
+  // const [history, setHistory] = useState([]);
+  // const session = getSession();
+  // useEffect(() => {
+  //   const fetchHistory = async () => {
+  //       await fetch(`${process.env.NEXTAUTH_URL}/api/user/${session.}`);
+  //   };
+  //   fetchHistory();
+  // }, []);
+
   return (
     <WidgetGrid>
       <Widget>
