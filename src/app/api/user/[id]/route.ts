@@ -5,8 +5,8 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  //사용자 권한 확인
   const accessToken = request.headers.get("authorization");
-
   if (!accessToken || !verifyJwt(accessToken)) {
     return new Response(JSON.stringify({ error: "No Authorization" }), {
       status: 401,

@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export const authOptions: NextAuthOptions = {
   providers: [
     // ID, PW 로그인 방식
+    // CredentiasProvider의 authorize함수를 통해
+    // /api/auth/signin의 endpoint를 호출해 동작.
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -48,6 +50,13 @@ export const authOptions: NextAuthOptions = {
       console.log("$$$ session: ", session);
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify-request",
+    newUser: "/auth/new-user",
   },
 };
 

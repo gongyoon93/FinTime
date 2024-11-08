@@ -34,3 +34,5 @@
   적용할 수 있다는 두번째 이유로 Next.js를 채택하게 되었다.
 
 - app폴더 하위의 RootLayout.tsx은 기본적으로 server component로 이 경우에 meta data를 사용할 수 있고 동시에 useState나 Recoil의 createContext 등을 사용하기 위해서는 'use client' 지시어를 사용해 client component 지정을 해줘야 한다. 예를 들어 RocoilRoot라는 전역 상태 관리를 상위에 Wrapping 하고자 한다면 RootLayout.tsx 이외의 client component 파일을 만들어 Recoil을 감싸고 이 파일을 RootLayout.tsx에 적용한다.
+
+- next-auth의 세션 정보는 기본적으로 쿠키에 저장된다. 클라이언트 측의 세션 저장소나 저장소 대신에 쿠키를 사용해 세션을 관리하기 때문이다. 보안과 세션 관리의 편의성 때문에 일반적인 인증 시스템에서 채택하는 방식이다.
