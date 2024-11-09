@@ -69,9 +69,8 @@ const Header = () => {
 
   const handleLogout = async () => {
     await signOut({
-      redirect: false,
+      redirect: true,
       callbackUrl: "/auth/signin",
-      // signout 이후 signin페이지 이동 처리
     });
   };
 

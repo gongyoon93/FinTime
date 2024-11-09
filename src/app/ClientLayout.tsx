@@ -35,9 +35,10 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  console.log(pathname);
 
   const isLoginPage = pathname === "/auth/signin";
+
+  //getSession
 
   return (
     <RecoilRoot>

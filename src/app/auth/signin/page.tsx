@@ -106,11 +106,11 @@ export default function SignIn() {
   const validateEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!value) {
-      setEmailError("Email is required");
+      setEmailError("이메일을 입력하세요.");
       return false;
     }
     if (!emailRegex.test(value)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError("이메일 형식을 확인하세요.");
       return false;
     }
     setEmailError("");
@@ -119,11 +119,11 @@ export default function SignIn() {
 
   const validatePassword = (value: string) => {
     if (!value) {
-      setPasswordError("Password is required");
+      setPasswordError("패스워드를 입력하세요.");
       return false;
     }
     if (value.length < 3) {
-      setPasswordError("Password must be at least 3 characters");
+      setPasswordError("패스워드는 3자 이상 입력해야 합니다.");
       return false;
     }
     // if (!/[A-Z]/.test(value)) {
