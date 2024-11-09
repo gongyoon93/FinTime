@@ -126,14 +126,6 @@ export default function SignIn() {
       setPasswordError("패스워드는 3자 이상 입력해야 합니다.");
       return false;
     }
-    // if (!/[A-Z]/.test(value)) {
-    //   setPasswordError("Password must contain at least one uppercase letter");
-    //   return false;
-    // }
-    // if (!/[a-z]/.test(value)) {
-    //   setPasswordError("Password must contain at least one lowercase letter");
-    //   return false;
-    // }
     if (!/[0-9]/.test(value)) {
       setPasswordError("Password must contain at least one number");
       return false;
