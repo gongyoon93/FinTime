@@ -4,7 +4,7 @@ import { FormEventHandler, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { Mail, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signInWithCredentials } from "@/app/serverActions/auth";
 
 const Container = styled.div`
   display: flex;
@@ -137,12 +137,7 @@ export default function SignIn() {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (validateEmail(email) && validatePassword(password)) {
-      await signIn("credentials", {
-        username: email,
-        password: password,
-        redirect: true,
-        callbackUrl: "/abook",
-      });
+      await signInWithCredentials(email, password);
     }
   };
 

@@ -38,8 +38,6 @@ export default function ClientLayout({
 
   const isLoginPage = pathname === "/auth/signin";
 
-  //getSession
-
   return (
     <RecoilRoot>
       <SessionProvider>

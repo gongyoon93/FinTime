@@ -83,10 +83,14 @@ const Header = () => {
       </TitleContainer>
       {/* <p>가계부</p> */}
       <IconContainer>
-        <MessageCircle size={24} />
-        <Star size={24} />
-        <Search size={24} />
-        <LogOut size={24} onClick={() => handleLogout()} />
+        <MessageCircle size={24} style={{ cursor: "pointer" }} />
+        <Star size={24} style={{ cursor: "pointer" }} />
+        <Search size={24} style={{ cursor: "pointer" }} />
+        <LogOut
+          size={24}
+          onClick={() => handleLogout()}
+          style={{ cursor: "pointer" }}
+        />
       </IconContainer>
     </HeaderContainer>
   );
