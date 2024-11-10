@@ -7,8 +7,6 @@ export async function middleware(req: NextRequest) {
   const isPublicPath = publicPaths.includes(req.nextUrl.pathname);
   const isFile = req.nextUrl.pathname.match(/\.(.*)$/);
 
-  const loginUrl = new URL("/auth/signin", req.url);
-
   if (isFile) {
     return NextResponse.next();
   }
@@ -17,10 +15,5 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/abook", req.url));
   }
 
-  if (!isPublicPath && !token) {
-    return NextResponse.redirect(loginUrl);
-  }
-
-  //요청을 그대로 진행
   return NextResponse.next();
 }
