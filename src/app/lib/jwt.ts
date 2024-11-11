@@ -21,11 +21,11 @@ export function signJwtAccessToken(
 //API CALL 받을 시 토큰의 유효성 체크
 export function verifyJwt(token: string) {
   try {
-    const secret_key = process.env.SECRET_KEY;
+    const secret_key = process.env.JWT_SECRET_KEY;
     const decoded = jwt.verify(token, secret_key!);
     return decoded as JwtPayload;
   } catch (error) {
-    console.log(error);
+    console.log("JWT Verification Error:" + error);
     return null;
   }
 }

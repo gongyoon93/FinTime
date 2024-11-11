@@ -1,6 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { verifyJwt } from "@/app/lib/jwt";
+import { signIn } from "next-auth/react";
 
+//next-auth 옵션
 export const authOptions: NextAuthOptions = {
   providers: [
     // ID, PW 로그인 방식
@@ -60,3 +63,23 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+// custom signin 함수
+export const signInWithCredentials = async (
+  email: string,
+  password: string
+) => {
+  await signIn("credentials", {
+    username: email,
+    password: password,
+    redirect: true,
+    callbackUrl: "/history",
+  });
+};
+
+// 사용자 권한 확인
+export async function validateAuth(accessToken: string | null) {
+  if (!accessToken || !verifyJwt(accessToken)) {
+    throw new Error("No Authorization");
+  }
+}

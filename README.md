@@ -36,3 +36,8 @@
 - app폴더 하위의 RootLayout.tsx은 기본적으로 server component로 이 경우에 meta data를 사용할 수 있고 동시에 useState나 Recoil의 createContext 등을 사용하기 위해서는 'use client' 지시어를 사용해 client component 지정을 해줘야 한다. 예를 들어 RocoilRoot라는 전역 상태 관리를 상위에 Wrapping 하고자 한다면 RootLayout.tsx 이외의 client component 파일을 만들어 Recoil을 감싸고 이 파일을 RootLayout.tsx에 적용한다.
 
 - next-auth의 세션 정보는 기본적으로 쿠키에 저장된다. 클라이언트 측의 세션 저장소나 저장소 대신에 쿠키를 사용해 세션을 관리하기 때문이다. 보안과 세션 관리의 편의성 때문에 일반적인 인증 시스템에서 채택하는 방식이다.
+
+- 새로고침 할 때 마다 잠깐의 깜빡임과 함께 CSS가 풀리는 오류가 있었다.
+  Styled-Component의 동작방식이 SSR(Server Side Rendering), SSG(Static Site Generation) 환경과 서버 컴포넌트에서 스타일링이 어렵다는 점이었다.
+  styled-component는 클라이언트가 런타임일 때, 스타일시트를 생성하고 '<style/>' 요소로 DOM에 주입한다. 프로젝트가 실행 중일 때 DOM요소에 주입되는 것이다. 서버사이드에서 동작하게 된다면 서버에서 HTML이 생성되고 style은 클라이언트 런타임 때 생성되고 주입되므로 잠깐의 시간동안 깜빡임이 존재하는 것이다.
+  > 해결 방법 :

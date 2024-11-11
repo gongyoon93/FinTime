@@ -4,7 +4,7 @@ import { FormEventHandler, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { Mail, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
-import { signInWithCredentials } from "@/app/serverActions/auth";
+import { signInWithCredentials } from "@/app/lib/auth";
 
 const Container = styled.div`
   display: flex;
