@@ -1,5 +1,5 @@
 //server component
-export default function ABookLayout({
+export default function HistoryLayout({
   children,
 }: {
   children: React.ReactNode;

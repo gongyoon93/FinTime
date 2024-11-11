@@ -2,11 +2,14 @@
 import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig = {
+  compiler: {
+    styledComponents: true,
+  },
   // async redirects() {
   //   return [
   //     {
   //       source: "/",
-  //       destination: "/abook",
+  //       destination: "/history",
   //       permanent: true,
   //     },
   //   ];

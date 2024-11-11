@@ -8,6 +8,6 @@ export const signInWithCredentials = async (
     username: email,
     password: password,
     redirect: true,
-    callbackUrl: "/abook",
+    callbackUrl: "/history",
   });
 };

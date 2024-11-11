@@ -28,7 +28,7 @@ const WidgetContent = styled.div`
   font-weight: bold;
 `;
 
-const Abook = () => {
+const History = () => {
   // const [history, setHistory] = useState([]);
   // const session = getSession();
   // useEffect(() => {
@@ -80,4 +80,4 @@ const Abook = () => {
   );
 };
 
-export default Abook;
+export default History;

@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { SessionProvider } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import StyledComponentsRegistry from "./lib/registry";
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -41,18 +42,20 @@ export default function ClientLayout({
   return (
     <RecoilRoot>
       <SessionProvider>
-        {isLoginPage && <>{children}</>}
-        {!isLoginPage && (
-          <LayoutContainer>
-            <Header />
-            <ContentContainer>
-              {/* <Navbar /> */}
-              <MainContent>{children}</MainContent>
-            </ContentContainer>
-            <Footer />
-          </LayoutContainer>
-        )}
-        <GlobalStyle />
+        <StyledComponentsRegistry>
+          {isLoginPage && <>{children}</>}
+          {!isLoginPage && (
+            <LayoutContainer>
+              <Header />
+              <ContentContainer>
+                {/* <Navbar /> */}
+                <MainContent>{children}</MainContent>
+              </ContentContainer>
+              <Footer />
+            </LayoutContainer>
+          )}
+          <GlobalStyle />
+        </StyledComponentsRegistry>
       </SessionProvider>
     </RecoilRoot>
   );
