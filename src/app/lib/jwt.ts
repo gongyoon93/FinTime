@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload, TokenExpiredError } from "jsonwebtoken";
 
 interface SignOption {
   expiresIn?: string | number;
@@ -25,7 +25,11 @@ export function verifyJwt(token: string) {
     const decoded = jwt.verify(token, secret_key!);
     return decoded as JwtPayload;
   } catch (error) {
-    console.log("JWT Verification Error:" + error);
+    if (error instanceof TokenExpiredError) {
+      console.log("JWT Token has expired.");
+    } else {
+      console.log("JWT Verification Error:", error);
+    }
     return null;
   }
 }

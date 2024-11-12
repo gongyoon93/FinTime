@@ -42,6 +42,7 @@ interface HistoryProps {
 }
 
 export default function HistoryLayout({ histories }: HistoryProps) {
+  console.log(histories);
   return (
     <WidgetGrid>
       {histories?.map((history) => (
