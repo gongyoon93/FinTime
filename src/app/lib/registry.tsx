@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useServerInsertedHTML } from "next/navigation";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 
+//server side에 styled-components 미리 적용
 export default function StyledComponentsRegistry({
   children,
 }: {

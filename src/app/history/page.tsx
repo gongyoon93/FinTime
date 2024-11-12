@@ -1,83 +1,52 @@
-"use client";
+import { getServerSession } from "next-auth";
+import HistoryLayout from "./layout";
 
-// import { getSession } from "next-auth/react";
-// import { useEffect, useState } from "react";
-import styled from "styled-components";
+// 동적 렌더링을 강제하여 데이터가 최신 상태로 유지되도록 설정
+//  export const dynamic = "force-dynamic";
 
-const WidgetGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-`;
+export default async function HistoryPage() {
+  const session = await getServerSession();
+  console.log("세션임" + session?.accessToken);
+  // const isSessionValid = !!token;
+  let histories = [];
 
-const Widget = styled.div`
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
+  // if (isSessionValid) {
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/history/user/1`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+    cache: "no-store",
+  });
 
-const WidgetTitle = styled.h2`
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-`;
+  if (res.ok) {
+    histories = await res.json();
+    console.log("결과임" + JSON.stringify(histories));
+  }
+  // }
 
-const WidgetContent = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-`;
+  // const id = 1;
+  // 서버 컴포넌트에서 API 데이터 패칭
+  // const res = await fetch(
+  //   `${process.env.NEXTAUTH_URL}/api/history/user/${id}`,
+  //   {
+  //     headers: { "Content-Type": "application/json",
+  //       "Authorization":
+  //      },
+  //     cache: "no-store", // 항상 최신 데이터 사용
+  //   }
+  // );
 
-const History = () => {
-  // const [history, setHistory] = useState([]);
-  // const session = getSession();
-  // useEffect(() => {
-  //   const fetchHistory = async () => {
-  //       await fetch(`${process.env.NEXTAUTH_URL}/api/user/${session.}`);
-  //   };
-  //   fetchHistory();
-  // }, []);
+  // if (!res.ok) {
+  //   throw new Error("Failed to fetch data");
+  // }
 
-  return (
-    <WidgetGrid>
-      <Widget>
-        <WidgetTitle>수입</WidgetTitle>
-        <WidgetContent>1,234</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>지출</WidgetTitle>
-        <WidgetContent>45,678</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>잔액</WidgetTitle>
-        <WidgetContent>42</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-      <Widget>
-        <WidgetTitle>예산</WidgetTitle>
-        <WidgetContent>133</WidgetContent>
-      </Widget>
-    </WidgetGrid>
-  );
-};
+  // // 데이터를 JSON으로 파싱
+  // const histories = await res.json();
 
-export default History;
+  // // JSON 데이터를 콘솔에 출력
+  // console.log("이거 맞아요3?", histories);
+
+  return <HistoryLayout histories={histories} />;
+}

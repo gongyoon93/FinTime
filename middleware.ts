@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
-
+  console.log("미들웨어" + JSON.stringify(token));
   // 인증이 필요한 페이지 접근 제어
   if (isMatch(request.nextUrl.pathname, matchersForAuth)) {
     return token

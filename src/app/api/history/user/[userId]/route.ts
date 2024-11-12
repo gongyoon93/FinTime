@@ -17,7 +17,7 @@ export async function GET(
 
     return new Response(JSON.stringify(userHistories));
   } catch (error) {
-    return new Response(JSON.stringify({ error: error }), {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
     });
   }

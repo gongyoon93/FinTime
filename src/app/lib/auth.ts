@@ -78,7 +78,10 @@ export const signInWithCredentials = async (
 };
 
 // 사용자 권한 확인
-export async function validateAuth(accessToken: string | null) {
+export async function validateAuth(authHeader: string | null) {
+  console.log("베리파이1" + authHeader);
+  const accessToken = authHeader?.split(" ")[1];
+  console.log("베리파이2" + accessToken);
   if (!accessToken || !verifyJwt(accessToken)) {
     throw new Error("No Authorization");
   }
