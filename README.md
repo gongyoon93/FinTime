@@ -40,4 +40,7 @@
 - 새로고침 할 때 마다 잠깐의 깜빡임과 함께 CSS가 풀리는 오류가 있었다.
   Styled-Component의 동작방식이 SSR(Server Side Rendering), SSG(Static Site Generation) 환경과 서버 컴포넌트에서 스타일링이 어렵다는 점이었다.
   styled-component는 클라이언트가 런타임일 때, 스타일시트를 생성하고 '<style/>' 요소로 DOM에 주입한다. 프로젝트가 실행 중일 때 DOM요소에 주입되는 것이다. 서버사이드에서 동작하게 된다면 서버에서 HTML이 생성되고 style은 클라이언트 런타임 때 생성되고 주입되므로 잠깐의 시간동안 깜빡임이 존재하는 것이다.
+
 - 브라우저에서 JWT Verification Error: JsonWebTokenError: jwt malformed 에러가 발생하는 이유는, NextAuth에서 기본적으로 생성된 암호화된(Encrypted) 세션 토큰을 직접 jwt.verify()로 검증할 수 없기 때문이다. NextAuth는 next-auth.session-token이라는 암호화된 토큰을 사용한다. 이 토큰은 JWT가 아닌 JWE(JSON Web Encryption) 형식으로, 암호화가 적용되어 있으며 jsonwebtoken 라이브러리로는 직접 검증할 수 없다.
+
+- 서버 컴포넌트의 fetch data를 props를 통해 클라이언트 컴포넌트로 넘겨주려 할 때 data에 undefined가 나타나 이 문제를 해결하는데 오랜 시간이 걸렸으나 해결할 수 있던 방법은 서버 컴포넌트는 layout.tsx, 클라이언트는 page.tsx 파일을 사용해야 한다. 반대로 사용하고 있었던 것...

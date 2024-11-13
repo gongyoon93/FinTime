@@ -3,7 +3,7 @@
 import { BarChart2, Home, Settings, Users } from "lucide-react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
-import { sidebarState } from "../atoms/sidebarAtom";
+import { sidebarState } from "../atom/sidebarAtom";
 
 const Sidebar = styled.nav<{ isOpen: boolean }>`
   width: ${(props) => (props.isOpen ? "250px" : "0")};

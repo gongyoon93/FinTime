@@ -1,10 +1,26 @@
 // import { validateAuth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params: { id } }: { params: { id: number } }
 ) {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  console.log("또큰3", token);
+
+  // if (!token) {
+  //   return NextResponse.json(
+  //     { error: "Authentication required" },
+  //     { status: 401 }
+  //   );
+  // }
+
   try {
     // await validateAuth(request.headers.get("authorization"));
 
@@ -15,10 +31,12 @@ export async function GET(
       },
     });
 
-    return new Response(JSON.stringify(userHistories));
+    return NextResponse.json(userHistories);
   } catch (error) {
-    return new Response(JSON.stringify({ error: error }), {
-      status: 401,
-    });
+    console.error("Error fetching histories:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

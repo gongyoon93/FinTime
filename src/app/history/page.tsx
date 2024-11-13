@@ -1,38 +1,58 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../lib/auth";
-import HistoryLayout from "./layout";
+"use client";
 
-// 동적 렌더링을 강제하여 데이터가 최신 상태로 유지되도록 설정
-//  export const dynamic = "force-dynamic";
+import styled from "styled-components";
 
-export default async function HistoryPage() {
-  const session = await getServerSession(authOptions);
+const WidgetGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+`;
 
-  // if (!session || !session.user || !session.accessToken) {
-  // 세션이 유효하지 않을 때
-  // console.error("User is not authenticated or access token is missing.");
-  // }
+const Widget = styled.div`
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`;
 
-  // const isSessionValid = !!token;
-  let histories = [];
-  // if (isSessionValid) {
-  const res = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/history/user/${session?.user.id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.user.accessToken}`,
-      },
-      cache: "no-store",
-      credentials: "include",
-    }
+const WidgetTitle = styled.h2`
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+`;
+
+const WidgetContent = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+`;
+
+interface History {
+  id: number;
+  transaction: string;
+  amount: number;
+  content?: string;
+  date: Date;
+  authorId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface HistoryProps {
+  histories: History[] | null;
+}
+
+export default function HistoryPage({
+  histories,
+}: HistoryProps): React.ReactNode {
+  console.log(JSON.stringify(histories));
+  return (
+    <WidgetGrid>
+      {histories?.map((history) => (
+        <Widget key={history.id}>
+          <WidgetTitle>{history.transaction}</WidgetTitle>
+          <WidgetContent>{history.amount}</WidgetContent>
+        </Widget>
+      ))}
+    </WidgetGrid>
   );
-
-  if (res.ok) {
-    histories = await res.json();
-    console.log("결과임" + JSON.stringify(histories));
-  }
-
-  return <HistoryLayout histories={histories} />;
 }

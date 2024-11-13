@@ -1,56 +1,36 @@
-"use client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
+import HistoryPage from "./page";
 
-import styled from "styled-components";
+export default async function HistoryLayout() {
+  const session = await getServerSession(authOptions);
 
-const WidgetGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-`;
+  if (
+    !session ||
+    !session.user ||
+    !session.user.id ||
+    !session.user.accessToken
+  ) {
+    throw new Error("User is not authenticated or access token is missing.");
+  }
 
-const Widget = styled.div`
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-const WidgetTitle = styled.h2`
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-`;
-
-const WidgetContent = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
-interface History {
-  id: number;
-  transaction: string;
-  amount: number;
-  content?: string;
-  date: Date;
-  authorId: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface HistoryProps {
-  histories: History[];
-}
-
-export default function HistoryLayout({ histories }: HistoryProps) {
-  console.log(histories);
-  return (
-    <WidgetGrid>
-      {histories?.map((history) => (
-        <Widget key={history.id}>
-          <WidgetTitle>{history.transaction}</WidgetTitle>
-          <WidgetContent>{history.amount}</WidgetContent>
-        </Widget>
-      ))}
-    </WidgetGrid>
+  const res = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/history/user/${session?.user.id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.user.accessToken}`,
+      },
+      cache: "no-store",
+    }
   );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
+  const histories = await res.json();
+
+  return <HistoryPage histories={histories} />;
 }
