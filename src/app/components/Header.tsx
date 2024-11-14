@@ -9,8 +9,10 @@ import {
   LogOut,
 } from "lucide-react";
 import styled from "styled-components";
-import { useState } from "react";
 import { signOut } from "next-auth/react";
+import { dateState } from "../atom/dateAtom";
+import { useRecoilState } from "recoil";
+import { addMonths, subMonths } from "date-fns";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -44,26 +46,17 @@ const IconContainer = styled.div`
 `;
 
 const Header = () => {
-  const [date, setDate] = useState(() => {
-    const today = new Date();
-    return { year: today.getFullYear(), month: today.getMonth() + 1 };
-  });
+  const [date, setDate] = useRecoilState(dateState);
 
   const handlePreviousMonth = () => {
     setDate((prevDate) => {
-      const newMonth = prevDate.month - 1;
-      const year = newMonth < 1 ? prevDate.year - 1 : prevDate.year;
-      const month = newMonth < 1 ? 12 : newMonth;
-      return { year, month };
+      return subMonths(prevDate, 1);
     });
   };
 
   const handleNextMonth = () => {
     setDate((prevDate) => {
-      const newMonth = prevDate.month + 1;
-      const year = newMonth > 12 ? prevDate.year + 1 : prevDate.year;
-      const month = newMonth > 12 ? 1 : newMonth;
-      return { year, month };
+      return addMonths(prevDate, 1);
     });
   };
 
@@ -78,10 +71,9 @@ const Header = () => {
     <HeaderContainer>
       <TitleContainer>
         <ChevronLeft onClick={handlePreviousMonth} size={24} cursor="pointer" />
-        <p>{`${date.year}년 ${date.month}월`}</p>
+        <p>{`${date.getFullYear()}년 ${date.getMonth() + 1}월`}</p>
         <ChevronRight onClick={handleNextMonth} size={24} cursor="pointer" />
       </TitleContainer>
-      {/* <p>가계부</p> */}
       <IconContainer>
         <MessageCircle size={24} style={{ cursor: "pointer" }} />
         <Star size={24} style={{ cursor: "pointer" }} />

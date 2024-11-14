@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { dateState } from "../atom/dateAtom";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -44,7 +47,12 @@ interface HistoryProps {
 export default function HistoryPage({
   histories,
 }: HistoryProps): React.ReactNode {
-  console.log(JSON.stringify(histories));
+  console.log("히스토리임", JSON.stringify(histories));
+  const date = useRecoilValue(dateState);
+  useEffect(() => {
+    console.log(date);
+  }, [date]);
+
   return (
     <WidgetGrid>
       {histories?.map((history) => (

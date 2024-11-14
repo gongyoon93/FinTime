@@ -1,5 +1,5 @@
-// import { validateAuth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
+import { endOfMonth, startOfMonth } from "date-fns";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,12 +22,18 @@ export async function GET(
   // }
 
   try {
-    // await validateAuth(request.headers.get("authorization"));
+    const now = new Date();
+    const startOfThisMonth = startOfMonth(now); // 이번 달의 첫째 날
+    const endOfThisMonth = endOfMonth(now);
 
     //조건과 일치하는 데이터들 조회하는 findMany
     const userHistories = await prisma.history.findMany({
       where: {
         authorId: id,
+        date: {
+          gte: startOfThisMonth,
+          lte: endOfThisMonth,
+        },
       },
     });
 

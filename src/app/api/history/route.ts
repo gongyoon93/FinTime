@@ -1,4 +1,4 @@
-import { validateAuth } from "@/app/lib/auth";
+// import { validateAuth } from "@/app/lib/auth";
 import prisma from "@/app/lib/prisma";
 
 interface RequestBody {
@@ -9,7 +9,7 @@ interface RequestBody {
 
 export async function POST(request: Request) {
   try {
-    await validateAuth(request.headers.get("authorization"));
+    // await validateAuth(request.headers.get("authorization"));
 
     const body: RequestBody = await request.json();
 
