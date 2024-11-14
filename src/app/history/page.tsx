@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { dateState } from "../atom/dateAtom";
+import { useRouter } from "next/navigation";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -49,8 +50,9 @@ export default function HistoryPage({
 }: HistoryProps): React.ReactNode {
   console.log("히스토리임", JSON.stringify(histories));
   const date = useRecoilValue(dateState);
+  const router = useRouter();
   useEffect(() => {
-    console.log(date);
+    router.push(`/history?month=${date.getMonth() + 1}`);
   }, [date]);
 
   return (
