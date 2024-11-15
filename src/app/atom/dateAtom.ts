@@ -1,7 +1,7 @@
-import { startOfMonth } from "date-fns";
 import { atom } from "recoil";
+import { getStartOfMonthInKST } from "../lib/date";
 
 export const dateState = atom<Date>({
   key: "dateState",
-  default: startOfMonth(new Date()),
+  default: getStartOfMonthInKST(),
 });

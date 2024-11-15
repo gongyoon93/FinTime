@@ -1,10 +1,11 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+// import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { dateState } from "../atom/dateAtom";
-import { useRouter } from "next/navigation";
+// import { dateState } from "../atom/dateAtom";
+// import { useRouter } from "next/navigation";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -30,7 +31,7 @@ const WidgetContent = styled.div`
   font-weight: bold;
 `;
 
-interface History {
+export interface History {
   id: number;
   transaction: string;
   amount: number;
@@ -41,19 +42,23 @@ interface History {
   updatedAt: Date;
 }
 
-interface HistoryProps {
+export interface HistoryProps {
   histories: History[] | null;
+  month?: string | number;
 }
 
 export default function HistoryPage({
   histories,
+  month,
 }: HistoryProps): React.ReactNode {
   console.log("히스토리임", JSON.stringify(histories));
-  const date = useRecoilValue(dateState);
-  const router = useRouter();
+  console.log("page의 month", month);
+  const searchParams = useSearchParams();
+  // const date = useRecoilValue(dateState);
+  // const router = useRouter();
   useEffect(() => {
-    router.push(`/history?month=${date.getMonth() + 1}`);
-  }, [date]);
+    console.log("page의 리렌더링", month);
+  }, [searchParams, month]);
 
   return (
     <WidgetGrid>

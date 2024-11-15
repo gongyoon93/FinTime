@@ -3,7 +3,11 @@ import { authOptions } from "../lib/auth";
 import HistoryPage from "./page";
 import { getHistoryByUser } from "../lib/history";
 
-export default async function HistoryLayout() {
+export default async function HistoryLayout({
+  searchParams,
+}: {
+  searchParams: { month?: string };
+}) {
   const session = await getServerSession(authOptions);
 
   if (
@@ -15,11 +19,15 @@ export default async function HistoryLayout() {
     throw new Error("User is not authenticated or access token is missing.");
   }
 
+  const month = searchParams?.month || new Date().getMonth() + 1;
+
   const histories = await getHistoryByUser(
     session?.user.id,
     session?.user.accessToken,
-    11
+    month
   );
+  console.log("layout의 month", month);
+  console.log("layout의 histories", histories);
 
-  return <HistoryPage histories={histories} />;
+  return <HistoryPage histories={histories} month={month} />;
 }

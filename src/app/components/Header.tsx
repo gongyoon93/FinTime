@@ -12,7 +12,8 @@ import styled from "styled-components";
 import { signOut } from "next-auth/react";
 import { dateState } from "../atom/dateAtom";
 import { useRecoilState } from "recoil";
-import { addMonths, subMonths } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
+import { useRouter } from "next/navigation";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -47,16 +48,21 @@ const IconContainer = styled.div`
 
 const Header = () => {
   const [date, setDate] = useRecoilState(dateState);
+  const router = useRouter();
 
   const handlePreviousMonth = () => {
     setDate((prevDate) => {
-      return subMonths(prevDate, 1);
+      const updatedDate = subMonths(prevDate, 1);
+      router.push(`/history?month=${updatedDate.getMonth() + 1}`);
+      return updatedDate;
     });
   };
 
   const handleNextMonth = () => {
     setDate((prevDate) => {
-      return addMonths(prevDate, 1);
+      const updatedDate = addMonths(prevDate, 1);
+      router.push(`/history?month=${updatedDate.getMonth() + 1}`);
+      return updatedDate;
     });
   };
 
@@ -71,7 +77,7 @@ const Header = () => {
     <HeaderContainer>
       <TitleContainer>
         <ChevronLeft onClick={handlePreviousMonth} size={24} cursor="pointer" />
-        <p>{`${date.getFullYear()}년 ${date.getMonth() + 1}월`}</p>
+        <p>{`${format(date, "yyyy")}년 ${format(date, "MM")}월`}</p>
         <ChevronRight onClick={handleNextMonth} size={24} cursor="pointer" />
       </TitleContainer>
       <IconContainer>
