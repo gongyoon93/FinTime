@@ -44,3 +44,6 @@
 - 브라우저에서 JWT Verification Error: JsonWebTokenError: jwt malformed 에러가 발생하는 이유는, NextAuth에서 기본적으로 생성된 암호화된(Encrypted) 세션 토큰을 직접 jwt.verify()로 검증할 수 없기 때문이다. NextAuth는 next-auth.session-token이라는 암호화된 토큰을 사용한다. 이 토큰은 JWT가 아닌 JWE(JSON Web Encryption) 형식으로, 암호화가 적용되어 있으며 jsonwebtoken 라이브러리로는 직접 검증할 수 없다.
 
 - 서버 컴포넌트의 fetch data를 props를 통해 클라이언트 컴포넌트로 넘겨주려 할 때 data에 undefined가 나타나 이 문제를 해결하는데 오랜 시간이 걸렸으나 해결할 수 있던 방법은 서버 컴포넌트는 layout.tsx, 클라이언트는 page.tsx 파일을 사용해야 한다. 반대로 사용하고 있었던 것...
+
+- 추가 데이터 요청시 SSR 방식 고민 : 네트워크 비용과 서버 부하 증가, 응답 대기 시간에 따라 사용자 경험 우려
+  > 서버 컴포넌트에서 초기 데이터를 로드하고, 클라이언트 컴포넌트에서 URL 쿼리 파라미터의 변경을 감지하여 추가 데이터를 갱신하는 방식으로 사용.

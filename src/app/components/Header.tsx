@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 import styled from "styled-components";
 import { signOut } from "next-auth/react";
-import { dateState } from "../atom/dateAtom";
-import { useRecoilState } from "recoil";
 import { addMonths, format, subMonths } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { getStartOfMonthInKST } from "../lib/date";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -47,23 +47,25 @@ const IconContainer = styled.div`
 `;
 
 const Header = () => {
-  const [date, setDate] = useRecoilState(dateState);
+  const searchParams = useSearchParams();
+  const month =
+    searchParams?.get("month") || (new Date().getMonth() + 1).toString();
+  const standDate = month
+    ? getStartOfMonthInKST(Number(month))
+    : getStartOfMonthInKST();
+  const [date, setDate] = useState(standDate);
   const router = useRouter();
 
   const handlePreviousMonth = () => {
-    setDate((prevDate) => {
-      const updatedDate = subMonths(prevDate, 1);
-      router.push(`/history?month=${updatedDate.getMonth() + 1}`);
-      return updatedDate;
-    });
+    const updatedDate = subMonths(date, 1);
+    setDate(updatedDate);
+    router.replace(`/history?month=${updatedDate.getMonth() + 1}`);
   };
 
   const handleNextMonth = () => {
-    setDate((prevDate) => {
-      const updatedDate = addMonths(prevDate, 1);
-      router.push(`/history?month=${updatedDate.getMonth() + 1}`);
-      return updatedDate;
-    });
+    const updatedDate = addMonths(date, 1);
+    setDate(updatedDate);
+    router.replace(`/history?month=${updatedDate.getMonth() + 1}`);
   };
 
   const handleLogout = async () => {

@@ -1,7 +1,7 @@
 export async function getHistoryByUser(
   id: number,
   accessToken: string,
-  month: string | number
+  month: number
 ) {
   const res = await fetch(
     `${process.env.NEXTAUTH_URL}/api/user/${id}/history?month=${month}`,

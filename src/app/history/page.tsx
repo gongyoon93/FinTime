@@ -2,10 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-// import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-// import { dateState } from "../atom/dateAtom";
-// import { useRouter } from "next/navigation";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -44,20 +41,25 @@ export interface History {
 
 export interface HistoryProps {
   histories: History[] | null;
-  month?: string | number;
+  month?: string;
 }
 
 export default function HistoryPage({
   histories,
   month,
 }: HistoryProps): React.ReactNode {
-  console.log("히스토리임", JSON.stringify(histories));
-  console.log("page의 month", month);
+  // console.log("히스토리 데이터:", JSON.stringify(histories));
+  // console.log("전달된 month 값:", month);
   const searchParams = useSearchParams();
-  // const date = useRecoilValue(dateState);
+  // const [date, setDate] = useRecoilState(dateState);
   // const router = useRouter();
   useEffect(() => {
-    console.log("page의 리렌더링", month);
+    //fetchHistory 로직 추가 + histories data 전역 상태로 관리
+    const month =
+      searchParams?.get("month") || (new Date().getMonth() + 1).toString();
+    // setDate(getStartOfMonthInKST(Number(month)));
+    // console.log("현재 month:", month);
+    // console.log("현재 month:", currentMonth);
   }, [searchParams, month]);
 
   return (
