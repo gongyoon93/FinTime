@@ -5,6 +5,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import { Mail, Lock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { signInWithCredentials } from "@/app/lib/auth";
+import { useSetRecoilState } from "recoil";
+import { sessionState } from "@/app/atom/sessionAtom";
 
 const Container = styled.div`
   display: flex;
@@ -102,6 +104,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const setSession = useSetRecoilState(sessionState);
 
   const validateEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -136,6 +139,7 @@ export default function SignIn() {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+
     if (validateEmail(email) && validatePassword(password)) {
       await signInWithCredentials(email, password);
     }

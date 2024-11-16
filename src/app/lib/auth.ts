@@ -69,7 +69,7 @@ export const signInWithCredentials = async (
   email: string,
   password: string
 ) => {
-  await signIn("credentials", {
+  return await signIn("credentials", {
     username: email,
     password: password,
     redirect: true,

@@ -16,7 +16,7 @@ export async function getHistoryByUser(
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch posts");
+    throw new Error("Failed to fetch histories");
   }
 
   return await res.json();

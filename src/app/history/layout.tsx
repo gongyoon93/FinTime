@@ -3,8 +3,6 @@ import { authOptions } from "../lib/auth";
 import HistoryPage from "./page";
 import { getHistoryByUser } from "../lib/history";
 
-export const dynamic = "force-dynamic";
-
 export default async function HistoryLayout() {
   const session = await getServerSession(authOptions);
 
@@ -27,5 +25,5 @@ export default async function HistoryLayout() {
   console.log("layout의 month", month);
   console.log("layout의 histories", histories);
 
-  return <HistoryPage histories={histories} month={month} />;
+  return <HistoryPage initialHistories={histories} />;
 }

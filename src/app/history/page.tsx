@@ -3,6 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { History, historyState } from "../atom/historyAtom";
+import { useRecoilState } from "recoil";
+import { getHistoryByUser } from "../lib/history";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -28,39 +31,43 @@ const WidgetContent = styled.div`
   font-weight: bold;
 `;
 
-export interface History {
-  id: number;
-  transaction: string;
-  amount: number;
-  content?: string;
-  date: Date;
-  authorId: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface HistoryProps {
-  histories: History[] | null;
-  month?: string;
-}
-
 export default function HistoryPage({
-  histories,
-  month,
-}: HistoryProps): React.ReactNode {
+  initialHistories,
+}: {
+  initialHistories: History[];
+}): React.ReactNode {
+  const [histories, setHistories] = useRecoilState(historyState);
+
+  useEffect(() => {
+    setHistories(initialHistories);
+  }, [initialHistories]);
   // console.log("히스토리 데이터:", JSON.stringify(histories));
   // console.log("전달된 month 값:", month);
   const searchParams = useSearchParams();
   // const [date, setDate] = useRecoilState(dateState);
   // const router = useRouter();
   useEffect(() => {
-    //fetchHistory 로직 추가 + histories data 전역 상태로 관리
-    const month =
-      searchParams?.get("month") || (new Date().getMonth() + 1).toString();
-    // setDate(getStartOfMonthInKST(Number(month)));
-    // console.log("현재 month:", month);
-    // console.log("현재 month:", currentMonth);
-  }, [searchParams, month]);
+    // 비동기 작업을 처리할 함수 정의
+    const fetchHistory = async () => {
+      try {
+        const month = searchParams?.get("month");
+        if (month) {
+          const histories = await getHistoryByUser(
+            session?.user.id,
+            session?.user.accessToken,
+            Number(month)
+          );
+          console.log("Refetched histories:", histories);
+
+          setHistories(histories);
+        }
+      } catch (error) {
+        console.error("Failed to refetch histories", error);
+      }
+    };
+
+    fetchHistory();
+  }, [searchParams]);
 
   return (
     <WidgetGrid>
