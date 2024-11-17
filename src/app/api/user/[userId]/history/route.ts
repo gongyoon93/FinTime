@@ -1,19 +1,21 @@
+import { validateAuth } from "@/app/lib/auth";
 import { getStartOfMonthInKST } from "@/app/lib/date";
 import prisma from "@/app/lib/prisma";
 import { endOfMonth } from "date-fns";
-import { getToken } from "next-auth/jwt";
+// import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
   { params: { id } }: { params: { id: number } }
 ) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  // validateAuth(request);
+  const headers = request.headers;
+  const cookie = headers.get("cookie");
+  const authorization = headers.get("authorization");
 
-  console.log("또큰3", token);
+  console.log("요청 쿠키:", cookie);
+  console.log("Authorization 헤더:", authorization);
 
   // if (!token) {
   //   return NextResponse.json(
@@ -23,13 +25,6 @@ export async function GET(
   // }
 
   const month = request.nextUrl.searchParams.get("month");
-
-  // if (!month) {
-  //   return NextResponse.json(
-  //     { error: "Month parameter is required" },
-  //     { status: 400 }
-  //   );
-  // }
 
   console.log("route의 month!", month);
   const startDate = month

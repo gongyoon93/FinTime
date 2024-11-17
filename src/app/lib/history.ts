@@ -11,7 +11,7 @@ export async function getHistoryByUser(
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      cache: "no-store",
+      credentials: "include", // 쿠키가 전송되도록 설정.
     }
   );
 

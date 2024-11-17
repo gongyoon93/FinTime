@@ -4,8 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { History, historyState } from "../atom/historyAtom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { getHistoryByUser } from "../lib/history";
+import { sessionState } from "../atom/sessionAtom";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -37,6 +38,7 @@ export default function HistoryPage({
   initialHistories: History[];
 }): React.ReactNode {
   const [histories, setHistories] = useRecoilState(historyState);
+  const session = useRecoilValue(sessionState);
 
   useEffect(() => {
     setHistories(initialHistories);
@@ -48,25 +50,23 @@ export default function HistoryPage({
   // const router = useRouter();
   useEffect(() => {
     // 비동기 작업을 처리할 함수 정의
-    const fetchHistory = async () => {
-      try {
-        const month = searchParams?.get("month");
-        if (month) {
-          const histories = await getHistoryByUser(
-            session?.user.id,
-            session?.user.accessToken,
-            Number(month)
-          );
-          console.log("Refetched histories:", histories);
-
-          setHistories(histories);
-        }
-      } catch (error) {
-        console.error("Failed to refetch histories", error);
-      }
-    };
-
-    fetchHistory();
+    // const fetchHistory = async () => {
+    //   try {
+    //     const month = searchParams?.get("month");
+    //     if (month) {
+    // const histories = await getHistoryByUser(
+    //         session?.user.id,
+    //         session?.user.accessToken,
+    //         Number(month)
+    //       );
+    //       console.log("Refetched histories:", histories);
+    //       setHistories(histories);
+    //     }
+    //   } catch (error) {
+    //     console.error("Failed to refetch histories", error);
+    //   }
+    // };
+    // fetchHistory();
   }, [searchParams]);
 
   return (

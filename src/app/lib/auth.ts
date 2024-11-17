@@ -2,6 +2,8 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { verifyJwt } from "@/app/lib/jwt";
 import { signIn } from "next-auth/react";
+import { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 //next-auth 옵션
 export const authOptions: NextAuthOptions = {
@@ -78,9 +80,15 @@ export const signInWithCredentials = async (
 };
 
 // 사용자 권한 확인
-export async function validateAuth(authHeader: string | null) {
-  const accessToken = authHeader?.split(" ")[1];
-  if (!accessToken || !verifyJwt(accessToken)) {
-    throw new Error("No Authorization");
+export async function validateAuth(request: NextRequest) {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  console.log("또큰임", token);
+
+  if (!token) {
+    throw new Error("Authentication required");
   }
 }
