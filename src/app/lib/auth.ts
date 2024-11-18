@@ -1,9 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { verifyJwt } from "@/app/lib/jwt";
 import { signIn } from "next-auth/react";
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { verifyJwt } from "./jwt";
 
 //next-auth 옵션
 export const authOptions: NextAuthOptions = {
@@ -45,14 +45,17 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  session: {
+    // maxAge: 1 * 1 * 40,
+  },
   callbacks: {
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
     async session({ session, token }) {
-      console.log("$$$ token: ", token);
+      // console.log("$$$ token: ", token);
       session.user = token as any;
-      console.log("$$$ session: ", session);
+      // console.log("$$$ session: ", session);
       return session;
     },
   },
@@ -79,16 +82,21 @@ export const signInWithCredentials = async (
   });
 };
 
-// 사용자 권한 확인
-export async function validateAuth(request: NextRequest) {
+// next-auth token 유효성 검사
+export async function validateNextAuth(request: NextRequest) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  console.log("또큰임", token);
+  return token;
+}
 
-  if (!token) {
-    throw new Error("Authentication required");
+// session token 유효성 검사
+export async function validateSession(request: NextRequest) {
+  const token = request.headers.get("authorization")?.split(" ")[1];
+  if (!token || !verifyJwt(token)) {
+    return null;
   }
+  return token;
 }

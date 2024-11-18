@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { match } from "path-to-regexp";
-import { getToken } from "next-auth/jwt"; // next-auth의 getToken 사용
+import { validateNextAuth } from "@/app/lib/auth";
 
 const matchersForAuth = ["/history", "/myaccount", "/settings"];
 const matchersForSignIn = ["/auth/signup", "/auth/signin"];
 export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
+  const token = await validateNextAuth(request);
+  console.log("middleware~", token);
   // 인증이 필요한 페이지 접근 제어
   if (isMatch(request.nextUrl.pathname, matchersForAuth)) {
     return token
@@ -28,6 +25,10 @@ export async function middleware(request: NextRequest) {
   // 인증 조건에 해당하지 않으면 요청 그대로 진행
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: [...matchersForAuth, ...matchersForSignIn],
+};
 
 // 경로 일치 확인
 function isMatch(pathname: string, urls: string[]) {

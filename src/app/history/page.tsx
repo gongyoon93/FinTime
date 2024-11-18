@@ -4,9 +4,11 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { History, historyState } from "../atom/historyAtom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { getHistoryByUser } from "../lib/history";
+import { Session } from "next-auth";
 import { sessionState } from "../atom/sessionAtom";
+import { signOut } from "next-auth/react";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -34,40 +36,57 @@ const WidgetContent = styled.div`
 
 export default function HistoryPage({
   initialHistories,
+  initialSession,
+  expired,
 }: {
   initialHistories: History[];
+  initialSession: Session | null;
+  expired: boolean;
 }): React.ReactNode {
+  const searchParams = useSearchParams();
+
   const [histories, setHistories] = useRecoilState(historyState);
-  const session = useRecoilValue(sessionState);
+  const [session, setSession] = useRecoilState(sessionState);
+
+  const month = searchParams?.get("month");
 
   useEffect(() => {
     setHistories(initialHistories);
-  }, [initialHistories]);
-  // console.log("히스토리 데이터:", JSON.stringify(histories));
-  // console.log("전달된 month 값:", month);
-  const searchParams = useSearchParams();
-  // const [date, setDate] = useRecoilState(dateState);
-  // const router = useRouter();
+    setSession(initialSession);
+  }, []);
+
   useEffect(() => {
-    // 비동기 작업을 처리할 함수 정의
-    // const fetchHistory = async () => {
-    //   try {
-    //     const month = searchParams?.get("month");
-    //     if (month) {
-    // const histories = await getHistoryByUser(
-    //         session?.user.id,
-    //         session?.user.accessToken,
-    //         Number(month)
-    //       );
-    //       console.log("Refetched histories:", histories);
-    //       setHistories(histories);
-    //     }
-    //   } catch (error) {
-    //     console.error("Failed to refetch histories", error);
-    //   }
-    // };
-    // fetchHistory();
-  }, [searchParams]);
+    if (expired) {
+      setSession(null);
+      signOut({ redirect: true });
+    }
+  }, [expired]);
+
+  // console.log("initialHistories", initialHistories);
+  // console.log("initialSession", initialSession);
+
+  // middleware 사용량 문제 해결..
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (month) {
+        const res = await getHistoryByUser(
+          session?.user.id || null,
+          session?.user.accessToken || null,
+          Number(month)
+        );
+        if (res.status === 200) {
+          console.log("Refetched histories:", res.data);
+          setHistories(res.data);
+        } else if (res.status === 401) {
+          setSession(null);
+          signOut({ redirect: true });
+        } else {
+          setHistories([]);
+        }
+      }
+    };
+    fetchHistory();
+  }, [month]);
 
   return (
     <WidgetGrid>

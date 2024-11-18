@@ -46,4 +46,13 @@
 - 서버 컴포넌트의 fetch data를 props를 통해 클라이언트 컴포넌트로 넘겨주려 할 때 data에 undefined가 나타나 이 문제를 해결하는데 오랜 시간이 걸렸으나 해결할 수 있던 방법은 서버 컴포넌트는 layout.tsx, 클라이언트는 page.tsx 파일을 사용해야 한다. 반대로 사용하고 있었던 것...
 
 - 추가 데이터 요청시 SSR 방식 고민 : 네트워크 비용과 서버 부하 증가, 응답 대기 시간에 따라 사용자 경험 우려
+
   > 서버 컴포넌트에서 초기 데이터를 로드하고, 클라이언트 컴포넌트에서 URL 쿼리 파라미터의 변경을 감지하여 추가 데이터를 갱신하는 방식으로 사용.
+
+- 전형적인 Next.js 애플리케이션은 요청 Header에 Authorization을 포함시키는 것보다 next-auth 방식이라면 route.ts에서 getToken으로, 서버 컴퍼넌트 layout.tsx에서 getServerSession으로 session 유효성 검사와 필요한 값을 사용할 수 있다.
+
+- 서버와 클라이언트에서 유효성 검사 분리:
+  서버: middleware와 getServerSession으로 세션 유효성 검사.
+  클라이언트: useSession으로 실시간 세션 상태 관리.
+
+- 브라우저의 페이지 요청에서는 next-auth 쿠키가 자동으로 포함되지만, API 요청에서는 클라이언트 측 fetch 함수에서 credentials: "include"를 사용하지 않으면 쿠키가 전송되지 않을 수 있다.

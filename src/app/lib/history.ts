@@ -1,23 +1,30 @@
+import { buildApiUrl } from "./util";
+
 export async function getHistoryByUser(
-  id: number,
-  accessToken: string,
+  id: number | null,
+  accessToken: string | null,
   month: number
 ) {
   const res = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/user/${id}/history?month=${month}`,
+    buildApiUrl(`/api/user/${id}/history?month=${month}`),
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      credentials: "include", // 쿠키가 전송되도록 설정.
     }
   );
 
+  const result = await res.json();
+  console.log("refetch");
   if (!res.ok) {
-    throw new Error("Failed to fetch histories");
+    return {
+      error: result.error,
+      status: res.status,
+      expired: res.status === 401 ? true : false,
+    };
   }
 
-  return await res.json();
+  return { data: result.data, status: res.status, expired: false };
 }

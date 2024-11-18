@@ -14,6 +14,8 @@ import { addMonths, format, subMonths } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { getStartOfMonthInKST } from "../lib/date";
+import { useSetRecoilState } from "recoil";
+import { sessionState } from "../atom/sessionAtom";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -47,6 +49,7 @@ const IconContainer = styled.div`
 `;
 
 const Header = () => {
+  const setSession = useSetRecoilState(sessionState);
   const searchParams = useSearchParams();
   const month =
     searchParams?.get("month") || (new Date().getMonth() + 1).toString();
@@ -69,6 +72,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
+    setSession(null);
     await signOut({
       redirect: true,
       callbackUrl: "/auth/signin",
