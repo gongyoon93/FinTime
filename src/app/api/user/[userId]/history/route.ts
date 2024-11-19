@@ -9,7 +9,7 @@ export async function GET(
   { params: { id } }: { params: { id: number } }
 ) {
   const accessToken = await validateSession(request);
-  console.log("GET의 token", accessToken);
+
   if (!accessToken) {
     return new NextResponse(JSON.stringify({ error: "No Authorization" }), {
       status: 401,

@@ -51,8 +51,7 @@ const IconContainer = styled.div`
 const Header = () => {
   const setSession = useSetRecoilState(sessionState);
   const searchParams = useSearchParams();
-  const month =
-    searchParams?.get("month") || (new Date().getMonth() + 1).toString();
+  const month = searchParams?.get("month");
   const standDate = month
     ? getStartOfMonthInKST(Number(month))
     : getStartOfMonthInKST();
@@ -62,13 +61,13 @@ const Header = () => {
   const handlePreviousMonth = () => {
     const updatedDate = subMonths(date, 1);
     setDate(updatedDate);
-    router.replace(`/history?month=${updatedDate.getMonth() + 1}`);
+    router.push(`/history?month=${updatedDate.getMonth() + 1}`);
   };
 
   const handleNextMonth = () => {
     const updatedDate = addMonths(date, 1);
     setDate(updatedDate);
-    router.replace(`/history?month=${updatedDate.getMonth() + 1}`);
+    router.push(`/history?month=${updatedDate.getMonth() + 1}`);
   };
 
   const handleLogout = async () => {

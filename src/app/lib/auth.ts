@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           }),
         });
         const user = await res.json();
-        console.log("$$$user: ", user);
+        // console.log("$$$user: ", user);
 
         if (user) {
           return user;

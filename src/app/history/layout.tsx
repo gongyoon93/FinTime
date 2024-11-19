@@ -3,36 +3,43 @@ import { authOptions } from "../lib/auth";
 import HistoryPage from "./page";
 import { getHistoryByUser } from "../lib/history";
 
-export default async function HistoryLayout() {
+// export const dynamic = "force-dynamic";
+
+export default async function HistoryLayout({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const currentMonth = (new Date().getMonth() + 1).toString();
+  const month =
+    typeof searchParams?.month === "string" ? searchParams.month : currentMonth;
+
   const session = await getServerSession(authOptions);
 
-  const month = (new Date().getMonth() + 1).toString();
-  console.log("layout의 accessToken", session?.user.accessToken);
+  // console.log("layout의 searchParams", searchParams);
+  // console.log("layout의 month", month);
+
+  if (!session?.user.id || !session?.user.accessToken) {
+    return (
+      <HistoryPage
+        initialHistories={[]}
+        initialSession={null}
+        expired={false}
+      />
+    );
+  }
 
   const res = await getHistoryByUser(
-    session?.user.id || null,
-    session?.user.accessToken || null,
+    session.user.id,
+    session.user.accessToken,
     Number(month)
   );
 
-  console.log("layout의 session!", session);
-  console.log("layout의 month!", month);
-  console.log("layout의 histories!", res.data);
-
-  let data;
-  if (res.status === 200) {
-    data = res.data;
-  } else if (res.status === 401) {
-    data = [];
-  } else {
-    data = [];
-  }
-
   return (
     <HistoryPage
-      initialHistories={data}
+      initialHistories={res.status === 200 ? res.data : []}
       initialSession={session}
-      expired={res.expired}
+      expired={res.status === 401}
     />
   );
 }

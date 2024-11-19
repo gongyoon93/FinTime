@@ -17,12 +17,12 @@ export async function getHistoryByUser(
   );
 
   const result = await res.json();
-  console.log("refetch");
+
   if (!res.ok) {
     return {
       error: result.error,
       status: res.status,
-      expired: res.status === 401 ? true : false,
+      expired: res.status === 401,
     };
   }
 

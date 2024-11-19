@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { History, historyState } from "../atom/historyAtom";
 import { useRecoilState } from "recoil";
@@ -34,48 +34,53 @@ const WidgetContent = styled.div`
   font-weight: bold;
 `;
 
+interface HistoryPageProps {
+  initialHistories: History[];
+  initialSession: Session | null;
+  expired: boolean;
+}
+
 export default function HistoryPage({
   initialHistories,
   initialSession,
   expired,
-}: {
-  initialHistories: History[];
-  initialSession: Session | null;
-  expired: boolean;
-}): React.ReactNode {
+}: HistoryPageProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-
   const [histories, setHistories] = useRecoilState(historyState);
   const [session, setSession] = useRecoilState(sessionState);
 
-  const month = searchParams?.get("month");
+  // 현재 URL의 month 파라미터 확인
+  const validateAndGetMonth = useCallback(() => {
+    const month = searchParams?.get("month");
+    const currentMonth = (new Date().getMonth() + 1).toString();
 
-  useEffect(() => {
-    setHistories(initialHistories);
-    setSession(initialSession);
-  }, []);
-
-  useEffect(() => {
-    if (expired) {
-      setSession(null);
-      signOut({ redirect: true });
+    if (
+      !month ||
+      isNaN(Number(month)) ||
+      Number(month) < 1 ||
+      Number(month) > 12
+    ) {
+      // 유효하지 않은 month인 경우 현재 월로 리다이렉트
+      router.replace(`/history?month=${currentMonth}`);
+      return currentMonth;
     }
-  }, [expired]);
 
-  // console.log("initialHistories", initialHistories);
-  // console.log("initialSession", initialSession);
+    return month;
+  }, [searchParams, router]);
 
-  // middleware 사용량 문제 해결..
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (month) {
+  const fetchHistory = useCallback(
+    async (month: string) => {
+      if (!session?.user.id || !session?.user.accessToken) return;
+
+      try {
         const res = await getHistoryByUser(
-          session?.user.id || null,
-          session?.user.accessToken || null,
+          session.user.id,
+          session.user.accessToken,
           Number(month)
         );
+
         if (res.status === 200) {
-          console.log("Refetched histories:", res.data);
           setHistories(res.data);
         } else if (res.status === 401) {
           setSession(null);
@@ -83,10 +88,25 @@ export default function HistoryPage({
         } else {
           setHistories([]);
         }
+      } catch (error) {
+        console.error("Error fetching history:", error);
+        setHistories([]);
       }
-    };
-    fetchHistory();
-  }, [month]);
+    },
+    [session, setHistories, router]
+  );
+
+  // 초기 데이터 설정
+  useEffect(() => {
+    setHistories(initialHistories);
+    setSession(initialSession);
+  }, [initialHistories, initialSession, setHistories, setSession]);
+
+  // URL 파라미터 변경 감지 및 데이터 fetch
+  useEffect(() => {
+    const month = validateAndGetMonth();
+    fetchHistory(month);
+  }, [searchParams, validateAndGetMonth, fetchHistory]);
 
   return (
     <WidgetGrid>
