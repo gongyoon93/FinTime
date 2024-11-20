@@ -3,10 +3,11 @@ import { buildApiUrl } from "./util";
 export async function getHistoryByUser(
   id: number | null,
   accessToken: string | null,
+  year: number,
   month: number
 ) {
   const res = await fetch(
-    buildApiUrl(`/api/user/${id}/history?month=${month}`),
+    buildApiUrl(`/api/user/${id}/history?year=${year}&month=${month}`),
     {
       method: "GET",
       headers: {

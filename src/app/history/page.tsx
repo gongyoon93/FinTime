@@ -9,6 +9,7 @@ import { getHistoryByUser } from "../lib/history";
 import { Session } from "next-auth";
 import { sessionState } from "../atom/sessionAtom";
 import { signOut } from "next-auth/react";
+import { isValidMonth, isValidYear } from "../lib/date";
 
 const WidgetGrid = styled.div`
   display: grid;
@@ -50,33 +51,37 @@ export default function HistoryPage({
   const [histories, setHistories] = useRecoilState(historyState);
   const [session, setSession] = useRecoilState(sessionState);
 
-  // 현재 URL의 month 파라미터 확인
-  const validateAndGetMonth = useCallback(() => {
-    const month = searchParams?.get("month");
-    const currentMonth = (new Date().getMonth() + 1).toString();
+  // 현재 URL의 year/month 파라미터 확인
+  const validateAndGetYearMonth = useCallback(() => {
+    const currentYear = new Date().getFullYear().toString();
+    const year = searchParams?.get("year") ?? currentYear;
 
-    if (
-      !month ||
-      isNaN(Number(month)) ||
-      Number(month) < 1 ||
-      Number(month) > 12
-    ) {
-      // 유효하지 않은 month인 경우 현재 월로 리다이렉트
-      router.replace(`/history?month=${currentMonth}`);
-      return currentMonth;
+    const currentMonth = (new Date().getMonth() + 1).toString();
+    const month = searchParams?.get("month") ?? currentMonth;
+
+    if (!isValidYear(year) || !isValidMonth(month)) {
+      router.replace(
+        `/history?year=${isValidYear(year) ? year : currentYear}&month=${
+          isValidMonth(month) ? month : currentMonth
+        }`
+      );
     }
 
-    return month;
+    return {
+      year: isValidYear(year) ? year : currentYear,
+      month: isValidMonth(month) ? month : month,
+    };
   }, [searchParams, router]);
 
   const fetchHistory = useCallback(
-    async (month: string) => {
+    async (year: string, month: string) => {
       if (!session?.user.id || !session?.user.accessToken) return;
 
       try {
         const res = await getHistoryByUser(
           session.user.id,
           session.user.accessToken,
+          Number(year),
           Number(month)
         );
 
@@ -104,9 +109,9 @@ export default function HistoryPage({
 
   // URL 파라미터 변경 감지 및 데이터 fetch
   useEffect(() => {
-    const month = validateAndGetMonth();
-    fetchHistory(month);
-  }, [searchParams, validateAndGetMonth, fetchHistory]);
+    const { year, month } = validateAndGetYearMonth();
+    fetchHistory(year, month);
+  }, [searchParams, validateAndGetYearMonth, fetchHistory]);
 
   return (
     <WidgetGrid>

@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateNextAuth } from "@/app/lib/auth";
-import { getCurrentMonth, isValidMonth } from "@/app/lib/util";
+import {
+  getCurrentMonth,
+  getCurrentYear,
+  isValidMonth,
+  isValidYear,
+} from "@/app/lib/date";
 
 // 라우트 그룹 정의
 const ROUTES = {
@@ -29,17 +34,26 @@ export async function middleware(request: NextRequest) {
         : NextResponse.next();
     }
 
-    // 3. 월 파라미터 라우트 처리
+    // 3. 연도/월 파라미터 라우트 처리
     if (ROUTES.MONTH_PARAM_ROUTES.some((route) => pathname.startsWith(route))) {
+      const year = searchParams.get("year");
       const month = searchParams.get("month");
 
-      // 월 파라미터가 유효하지 않은 경우 처리
-      if (isValidMonth(month)) {
+      // 연도 파라미터가 유효하지 않은 경우 처리
+      if (isValidYear(year) || isValidMonth(month)) {
+        const currentYear = getCurrentYear();
         const currentMonth = getCurrentMonth();
         const url = new URL(request.url);
 
-        // 월 파라미터 업데이트
-        url.searchParams.set("month", currentMonth);
+        if (isValidYear(year)) {
+          // 연도 파라미터 업데이트
+          url.searchParams.set("year", currentYear);
+        }
+
+        if (isValidMonth(month)) {
+          // 월 파라미터 업데이트
+          url.searchParams.set("month", currentMonth);
+        }
 
         return NextResponse.redirect(url);
       }

@@ -10,7 +10,10 @@ export default async function HistoryLayout({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
+  const currentYear = new Date().getFullYear().toString();
   const currentMonth = (new Date().getMonth() + 1).toString();
+  const year =
+    typeof searchParams?.year === "string" ? searchParams.year : currentYear;
   const month =
     typeof searchParams?.month === "string" ? searchParams.month : currentMonth;
 
@@ -32,6 +35,7 @@ export default async function HistoryLayout({
   const res = await getHistoryByUser(
     session.user.id,
     session.user.accessToken,
+    Number(year),
     Number(month)
   );
 

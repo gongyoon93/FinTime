@@ -13,7 +13,7 @@ import { signOut } from "next-auth/react";
 import { addMonths, format, subMonths } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { getStartOfMonthInKST } from "../lib/date";
+import { getStartOfMonthInKST, isValidMonth, isValidYear } from "../lib/date";
 import { useSetRecoilState } from "recoil";
 import { sessionState } from "../atom/sessionAtom";
 
@@ -51,23 +51,33 @@ const IconContainer = styled.div`
 const Header = () => {
   const setSession = useSetRecoilState(sessionState);
   const searchParams = useSearchParams();
-  const month = searchParams?.get("month");
-  const standDate = month
-    ? getStartOfMonthInKST(Number(month))
-    : getStartOfMonthInKST();
+  const year = searchParams?.get("year") || null;
+  const month = searchParams?.get("month") || null;
+  const standDate =
+    isValidYear(year) && isValidMonth(month)
+      ? getStartOfMonthInKST(Number(year), Number(month))
+      : getStartOfMonthInKST();
   const [date, setDate] = useState(standDate);
   const router = useRouter();
 
   const handlePreviousMonth = () => {
     const updatedDate = subMonths(date, 1);
     setDate(updatedDate);
-    router.push(`/history?month=${updatedDate.getMonth() + 1}`);
+    router.push(
+      `/history?year=${updatedDate.getFullYear()}&month=${
+        updatedDate.getMonth() + 1
+      }`
+    );
   };
 
   const handleNextMonth = () => {
     const updatedDate = addMonths(date, 1);
     setDate(updatedDate);
-    router.push(`/history?month=${updatedDate.getMonth() + 1}`);
+    router.push(
+      `/history?year=${updatedDate.getFullYear()}&month=${
+        updatedDate.getMonth() + 1
+      }`
+    );
   };
 
   const handleLogout = async () => {

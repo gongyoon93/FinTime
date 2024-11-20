@@ -17,9 +17,11 @@ export async function GET(
   }
 
   const month = request.nextUrl.searchParams.get("month");
-  const startDate = month
-    ? getStartOfMonthInKST(Number(month))
-    : getStartOfMonthInKST();
+  const year = request.nextUrl.searchParams.get("year");
+  const startDate =
+    year && month
+      ? getStartOfMonthInKST(Number(year), Number(month))
+      : getStartOfMonthInKST();
   const endDate = endOfMonth(startDate);
 
   try {
