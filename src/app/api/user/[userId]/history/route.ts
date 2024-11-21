@@ -1,8 +1,14 @@
 import { validateSession } from "@/app/lib/auth";
 import { getStartOfMonthInKST } from "@/app/lib/date";
 import prisma from "@/app/lib/prisma";
-import { endOfMonth } from "date-fns";
+import { endOfMonth, parseISO } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
+import { groupBy, sumBy } from "lodash";
+import { format, toZonedTime } from "date-fns-tz";
+import { Decimal } from "@prisma/client/runtime/library";
+
+// 한국 시간대 설정
+const timeZone = "Asia/Seoul";
 
 export async function GET(
   request: NextRequest,
@@ -34,9 +40,51 @@ export async function GET(
           lte: endDate,
         },
       },
+      orderBy: {
+        date: "desc",
+      },
     });
 
-    return NextResponse.json({ data: userHistories }, { status: 200 });
+    // 날짜별로 그룹화
+    const groupedData = groupBy(userHistories, (history) =>
+      toZonedTime(history.date, timeZone)
+    );
+
+    // 월별 수입/지출 합산
+    const monthlyIncome = sumBy(
+      userHistories.filter((history) => history.transaction === "INCOME"),
+      (history) => new Decimal(history.amount).toNumber()
+    );
+
+    const monthlyExpense = sumBy(
+      userHistories.filter((history) => history.transaction === "EXPENSE"),
+      (history) => new Decimal(history.amount).toNumber()
+    );
+
+    // 일별 데이터 구성
+    const list = Object.entries(groupedData).map(([date, histories]) => {
+      const dailyIncome = sumBy(
+        histories.filter((history) => history.transaction === "INCOME"),
+        (history) => new Decimal(history.amount).toNumber()
+      );
+
+      const dailyExpense = sumBy(
+        histories.filter((history) => history.transaction === "EXPENSE"),
+        (history) => new Decimal(history.amount).toNumber()
+      );
+
+      return {
+        date,
+        dailyIncome,
+        dailyExpense,
+        dailyList: histories,
+      };
+    });
+
+    return NextResponse.json(
+      { monthlyIncome, monthlyExpense, list },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error fetching histories:", error);
     return NextResponse.json(

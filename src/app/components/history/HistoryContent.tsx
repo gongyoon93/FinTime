@@ -41,30 +41,34 @@ const Amount = styled.div<{ isExpense?: boolean }>`
 
 export default function HistoryContent(history: History) {
   return (
-    <ContentContainer key={history.id + "" + history.date}>
-      <ContentDay>
-        <div>24 목요일 2024.10{format(history.date, "dd yyyy.MM")}</div>
-        <Amount>{history.amount}</Amount>
-      </ContentDay>
-      <ContentItem>
-        <div>부모님</div>
-        <div>오후 8:18 현금</div>
-        <Amount isExpense>8,777,565,555,555원</Amount>
-      </ContentItem>
-      <ContentItem>
-        <div>용돈</div>
-        <div>오후 4:21 현금</div>
-        <Amount>300원</Amount>
-      </ContentItem>
-      <ContentDay>
-        <div>23 수요일 2024.10</div>
-        <Amount>0원</Amount>
-      </ContentDay>
-      <ContentItem>
-        <div>문화생활</div>
-        <div>오후 9:37 현금</div>
-        <Amount isExpense>2,000원</Amount>
-      </ContentItem>
-    </ContentContainer>
+    <>
+      <ContentContainer>
+        <ContentDay>
+          <div>24 목요일 2024.10{format(history.date, "dd yyyy.MM")}</div>
+          <Amount>{history.amount}</Amount>
+        </ContentDay>
+        <ContentItem>
+          <div>부모님</div>
+          <div>오후 8:18 현금</div>
+          <Amount isExpense>8,777,565,555,555원</Amount>
+        </ContentItem>
+        <ContentItem>
+          <div>용돈</div>
+          <div>오후 4:21 현금</div>
+          <Amount>300원</Amount>
+        </ContentItem>
+      </ContentContainer>
+      <ContentContainer>
+        <ContentDay>
+          <div>23 수요일 2024.10</div>
+          <Amount>0원</Amount>
+        </ContentDay>
+        <ContentItem>
+          <div>문화생활</div>
+          <div>오후 9:37 현금</div>
+          <Amount isExpense>2,000원</Amount>
+        </ContentItem>
+      </ContentContainer>
+    </>
   );
 }
