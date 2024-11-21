@@ -27,6 +27,6 @@ export async function getHistoryByUser(
     };
   }
 
-  console.log("result.data", result.data);
-  return { data: result.data, status: res.status, expired: false };
+  console.log("result", result);
+  return { data: result, status: res.status, expired: false };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { History } from "@/app/atom/historyAtom";
+import { HistoryList } from "@/app/atom/historyAtom";
 import { format } from "date-fns";
 import styled from "styled-components";
 
@@ -39,36 +39,37 @@ const Amount = styled.div<{ isExpense?: boolean }>`
   color: ${({ isExpense }) => (isExpense ? "red" : "blue")};
 `;
 
-export default function HistoryContent(history: History) {
+export default function HistoryContent({
+  datelist,
+}: {
+  datelist: HistoryList[];
+}) {
   return (
     <>
-      <ContentContainer>
-        <ContentDay>
-          <div>24 목요일 2024.10{format(history.date, "dd yyyy.MM")}</div>
-          <Amount>{history.amount}</Amount>
-        </ContentDay>
-        <ContentItem>
-          <div>부모님</div>
-          <div>오후 8:18 현금</div>
-          <Amount isExpense>8,777,565,555,555원</Amount>
-        </ContentItem>
-        <ContentItem>
-          <div>용돈</div>
-          <div>오후 4:21 현금</div>
-          <Amount>300원</Amount>
-        </ContentItem>
-      </ContentContainer>
-      <ContentContainer>
-        <ContentDay>
-          <div>23 수요일 2024.10</div>
-          <Amount>0원</Amount>
-        </ContentDay>
-        <ContentItem>
-          <div>문화생활</div>
-          <div>오후 9:37 현금</div>
-          <Amount isExpense>2,000원</Amount>
-        </ContentItem>
-      </ContentContainer>
+      {datelist?.map((date) => (
+        <ContentContainer key={"container " + format(date.date, "dd yyyy.MM")}>
+          <ContentDay>
+            <div>{format(date.date, "dd yyyy.MM")}</div>
+            <Amount>{`${date.dailyIncome.toLocaleString("ko-KR")}원`}</Amount>
+          </ContentDay>
+          {date.dailyList?.map((daily) => (
+            <ContentItem
+              key={
+                "container " +
+                format(date.date, "dd yyyy.MM") +
+                " author " +
+                daily.id
+              }
+            >
+              <div>{daily.content}</div>
+              <div>{format(daily.date, "HH:mm")}</div>
+              <Amount isExpense>{`${daily.amount.toLocaleString(
+                "ko-KR"
+              )}원`}</Amount>
+            </ContentItem>
+          ))}
+        </ContentContainer>
+      ))}
     </>
   );
 }

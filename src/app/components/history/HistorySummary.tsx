@@ -17,16 +17,24 @@ const Amount = styled.div<{ isExpense?: boolean }>`
   color: ${({ isExpense }) => (isExpense ? "red" : "blue")};
 `;
 
-export default function HistorySummary() {
+export default function HistorySummary({
+  monthlyIncome,
+  monthlyExpense,
+}: {
+  monthlyIncome: number;
+  monthlyExpense: number;
+}) {
   return (
     <SummaryContainer>
       <SummaryItem>
         <div>수입</div>
-        <Amount>300원</Amount>
+        <Amount>{`${monthlyIncome.toLocaleString("ko-KR")}원`}</Amount>
       </SummaryItem>
       <SummaryItem>
         <div>지출</div>
-        <Amount isExpense>8,777,565,557,555원</Amount>
+        <Amount isExpense>{`${monthlyExpense.toLocaleString(
+          "ko-KR"
+        )}원`}</Amount>
       </SummaryItem>
       <SummaryItem>
         <div>합계</div>

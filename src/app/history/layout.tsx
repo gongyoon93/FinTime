@@ -25,7 +25,7 @@ export default async function HistoryLayout({
   if (!session?.user.id || !session?.user.accessToken) {
     return (
       <HistoryPage
-        initialHistories={[]}
+        initialHistories={{ monthlyIncome: 0, monthlyExpense: 0, list: [] }}
         initialSession={null}
         expired={false}
       />
@@ -41,7 +41,11 @@ export default async function HistoryLayout({
 
   return (
     <HistoryPage
-      initialHistories={res.status === 200 ? res.data : []}
+      initialHistories={
+        res.status === 200
+          ? res.data
+          : { monthlyIncome: 0, monthlyExpense: 0, list: [] }
+      }
       initialSession={session}
       expired={res.status === 401}
     />

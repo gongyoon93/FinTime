@@ -3,14 +3,13 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
-import { History, historyState } from "../atom/historyAtom";
+import { History, HistoryList, historyState } from "../atom/historyAtom";
 import { useRecoilState } from "recoil";
 import { getHistoryByUser } from "../lib/history";
 import { Session } from "next-auth";
 import { sessionState } from "../atom/sessionAtom";
 import { signOut } from "next-auth/react";
 import { isValidMonth, isValidYear } from "../lib/date";
-import { modifyTransaction } from "../lib/util";
 import TranSummary from "../components/history/HistorySummary";
 import HistoryContent from "../components/history/HistoryContent";
 
@@ -57,7 +56,11 @@ const WidgetContent = styled.div`
 `;
 
 interface HistoryPageProps {
-  initialHistories: History[];
+  initialHistories: {
+    monthlyIncome: number;
+    monthlyExpense: number;
+    list: HistoryList[];
+  };
   initialSession: Session | null;
   expired: boolean;
 }
@@ -69,7 +72,7 @@ export default function HistoryPage({
 }: HistoryPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [histories, setHistories] = useRecoilState(historyState);
+  const [history, setHistory] = useRecoilState(historyState);
   const [session, setSession] = useRecoilState(sessionState);
 
   // 현재 URL의 year/month 파라미터 확인
@@ -107,26 +110,26 @@ export default function HistoryPage({
         );
 
         if (res.status === 200) {
-          setHistories(res.data);
+          setHistory(res.data);
         } else if (res.status === 401) {
           setSession(null);
           signOut({ redirect: true });
         } else {
-          setHistories([]);
+          setHistory({ monthlyIncome: 0, monthlyExpense: 0, list: [] });
         }
       } catch (error) {
         console.error("Error fetching history:", error);
-        setHistories([]);
+        setHistory({ monthlyIncome: 0, monthlyExpense: 0, list: [] });
       }
     },
-    [session, setHistories, router]
+    [session, setHistory, router]
   );
 
   // 초기 데이터 설정
   useEffect(() => {
-    setHistories(initialHistories);
+    setHistory(initialHistories);
     setSession(initialSession);
-  }, [initialHistories, initialSession, setHistories, setSession]);
+  }, [initialHistories, initialSession, setHistory, setSession]);
 
   // URL 파라미터 변경 감지 및 데이터 fetch
   useEffect(() => {
@@ -136,15 +139,17 @@ export default function HistoryPage({
 
   return (
     <>
-      <TranSummary />
+      <TranSummary
+        monthlyIncome={history.monthlyIncome}
+        monthlyExpense={history.monthlyExpense}
+      />
       <HistoryContainer>
-        {histories?.map((history) => (
-          <HistoryContent />
-          // <Widget key={history.id}>
-          //   <WidgetTitle>{modifyTransaction(history.transaction)}</WidgetTitle>
-          //   <WidgetContent>{history.amount}</WidgetContent>
-          // </Widget>
-        ))}
+        <HistoryContent datelist={history.list} />
+        {/* <Widget key={history.id}>
+             <WidgetTitle>{modifyTransaction(history.transaction)}</WidgetTitle>
+             <WidgetContent>{history.amount}</WidgetContent>
+           </Widget> */}
+
         {/* <Widget>
           <WidgetTitle>111</WidgetTitle>
           <WidgetContent>222</WidgetContent>
