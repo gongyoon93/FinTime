@@ -12,3 +12,14 @@ export function isMatch(pathname: string, urls: string[]): boolean {
     return pattern.test(pathname);
   });
 }
+
+export function modifyTransaction(transaction: string) {
+  if (transaction === "INCOME") {
+    return "수입";
+  } else if (transaction === "EXPENSE") {
+    return "지출";
+  } else if (transaction === "TRANSFER") {
+    return "이체";
+  }
+  return;
+}

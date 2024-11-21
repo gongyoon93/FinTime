@@ -4,7 +4,6 @@
 import { RecoilRoot } from "recoil";
 import styled from "styled-components";
 import Header from "./components/Header";
-// import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { GlobalStyle } from "./style/GlobalStyle";
 import { SessionProvider } from "next-auth/react";
@@ -24,10 +23,9 @@ const ContentContainer = styled.div`
 `;
 
 const MainContent = styled.main`
-  height: calc(100% - 2rem);
-  padding: 1rem;
+  height: 100%;
   background-color: #f7fafc;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 `;
 
 export default function ClientLayout({
@@ -48,7 +46,6 @@ export default function ClientLayout({
             <LayoutContainer>
               <Header />
               <ContentContainer>
-                {/* <Navbar /> */}
                 <MainContent>{children}</MainContent>
               </ContentContainer>
               <Footer />

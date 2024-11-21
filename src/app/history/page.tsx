@@ -10,12 +10,29 @@ import { Session } from "next-auth";
 import { sessionState } from "../atom/sessionAtom";
 import { signOut } from "next-auth/react";
 import { isValidMonth, isValidYear } from "../lib/date";
+import { modifyTransaction } from "../lib/util";
+import TranSummary from "../components/history/HistorySummary";
+import HistoryContent from "../components/history/HistoryContent";
 
-const WidgetGrid = styled.div`
+const WidgetGrid = styled.section`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 1rem 1rem;
+`;
+
+const HistoryContainer = styled.section`
+  width: calc(100% - 2rem);
+  height: calc(100% - 7rem);
+  margin: 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Widget = styled.div`
@@ -23,6 +40,10 @@ const Widget = styled.div`
   border-radius: 0.5rem;
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  &:first-child {
+    margin-top: 0;
+  }
 `;
 
 const WidgetTitle = styled.h2`
@@ -114,13 +135,49 @@ export default function HistoryPage({
   }, [searchParams, validateAndGetYearMonth, fetchHistory]);
 
   return (
-    <WidgetGrid>
-      {histories?.map((history) => (
-        <Widget key={history.id}>
-          <WidgetTitle>{history.transaction}</WidgetTitle>
-          <WidgetContent>{history.amount}</WidgetContent>
+    <>
+      <TranSummary />
+      <HistoryContainer>
+        {histories?.map((history) => (
+          <HistoryContent />
+          // <Widget key={history.id}>
+          //   <WidgetTitle>{modifyTransaction(history.transaction)}</WidgetTitle>
+          //   <WidgetContent>{history.amount}</WidgetContent>
+          // </Widget>
+        ))}
+        {/* <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
         </Widget>
-      ))}
-    </WidgetGrid>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetTitle>111</WidgetTitle>
+          <WidgetContent>222</WidgetContent>
+        </Widget> */}
+      </HistoryContainer>
+    </>
   );
 }
