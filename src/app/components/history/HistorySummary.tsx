@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import styled from "styled-components";
 
 const SummaryContainer = styled.section`
@@ -24,6 +25,13 @@ export default function HistorySummary({
   monthlyIncome: number;
   monthlyExpense: number;
 }) {
+  const amount = useMemo(() => {
+    const difference = monthlyIncome - monthlyExpense;
+    return {
+      type: difference >= 0 ? "income" : "expense",
+      value: Math.abs(difference),
+    };
+  }, [monthlyIncome, monthlyExpense]);
   return (
     <SummaryContainer>
       <SummaryItem>
@@ -38,7 +46,13 @@ export default function HistorySummary({
       </SummaryItem>
       <SummaryItem>
         <div>합계</div>
-        <Amount isExpense>-8,777,565,557,255원</Amount>
+        <Amount isExpense={amount.type === "expense" ? true : false}>
+          {`${
+            amount.type === "expense"
+              ? "-"
+              : "" + amount.value.toLocaleString("ko-KR")
+          }원`}
+        </Amount>
       </SummaryItem>
     </SummaryContainer>
   );

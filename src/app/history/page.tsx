@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
-import { History, HistoryList, historyState } from "../atom/historyAtom";
+import { HistoryList, historyState } from "../atom/historyAtom";
 import { useRecoilState } from "recoil";
 import { getHistoryByUser } from "../lib/history";
 import { Session } from "next-auth";
@@ -12,13 +12,6 @@ import { signOut } from "next-auth/react";
 import { isValidMonth, isValidYear } from "../lib/date";
 import TranSummary from "../components/history/HistorySummary";
 import HistoryContent from "../components/history/HistoryContent";
-
-const WidgetGrid = styled.section`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  margin: 1rem 1rem;
-`;
 
 const HistoryContainer = styled.section`
   width: calc(100% - 2rem);
@@ -32,27 +25,6 @@ const HistoryContainer = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const Widget = styled.div`
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-top: 1rem;
-  &:first-child {
-    margin-top: 0;
-  }
-`;
-
-const WidgetTitle = styled.h2`
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-`;
-
-const WidgetContent = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
 `;
 
 interface HistoryPageProps {
@@ -145,43 +117,6 @@ export default function HistoryPage({
       />
       <HistoryContainer>
         <HistoryContent datelist={history.list} />
-        {/* <Widget key={history.id}>
-             <WidgetTitle>{modifyTransaction(history.transaction)}</WidgetTitle>
-             <WidgetContent>{history.amount}</WidgetContent>
-           </Widget> */}
-
-        {/* <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget>
-        <Widget>
-          <WidgetTitle>111</WidgetTitle>
-          <WidgetContent>222</WidgetContent>
-        </Widget> */}
       </HistoryContainer>
     </>
   );

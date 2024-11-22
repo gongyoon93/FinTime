@@ -1,10 +1,10 @@
 import { validateSession } from "@/app/lib/auth";
 import { getStartOfMonthInKST } from "@/app/lib/date";
 import prisma from "@/app/lib/prisma";
-import { endOfMonth } from "date-fns";
+import { endOfMonth, startOfDay } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 import { groupBy, sumBy } from "lodash";
-import { toZonedTime } from "date-fns-tz";
+import { format, toZonedTime } from "date-fns-tz";
 import { Decimal } from "@prisma/client/runtime/library";
 
 // 한국 시간대 설정
@@ -46,9 +46,12 @@ export async function GET(
     });
 
     // 날짜별로 그룹화
-    const groupedData = groupBy(userHistories, (history) =>
-      toZonedTime(history.date, timeZone)
-    );
+    const groupedByDate = groupBy(userHistories, (history) => {
+      console.log(history.date);
+      console.log(startOfDay(history.date), "yyyy-MM-dd");
+      const date = toZonedTime(history.date, timeZone);
+      return format(startOfDay(history.date), "yyyy-MM-dd");
+    });
 
     // 월별 수입/지출 합산
     const monthlyIncome = sumBy(
@@ -62,7 +65,7 @@ export async function GET(
     );
 
     // 일별 데이터 구성
-    const list = Object.entries(groupedData).map(([date, histories]) => {
+    const list = Object.entries(groupedByDate).map(([date, histories]) => {
       const dailyIncome = sumBy(
         histories.filter((history) => history.transaction === "INCOME"),
         (history) => new Decimal(history.amount).toNumber()
