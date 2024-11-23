@@ -51,6 +51,9 @@ export default function HistoryContent({
           <ContentDay>
             <div>{format(date.date, "dd yyyy.MM")}</div>
             <Amount>{`${date.dailyIncome.toLocaleString("ko-KR")}원`}</Amount>
+            <Amount isExpense>{`${date.dailyExpense.toLocaleString(
+              "ko-KR"
+            )}원`}</Amount>
           </ContentDay>
           {date.dailyList?.map((daily) => (
             <ContentItem
@@ -61,11 +64,14 @@ export default function HistoryContent({
                 daily.id
               }
             >
+              <div>카테고리</div>
               <div>{daily.content}</div>
               <div>{format(daily.date, "HH:mm")}</div>
-              <Amount isExpense>{`${daily.amount.toLocaleString(
-                "ko-KR"
-              )}원`}</Amount>
+              <Amount
+                isExpense={daily.transaction === "EXPENSE" ? true : false}
+              >
+                {`${Number(daily.amount).toLocaleString("ko-KR")}원`}
+              </Amount>
             </ContentItem>
           ))}
         </ContentContainer>
