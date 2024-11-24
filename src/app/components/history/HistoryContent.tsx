@@ -64,7 +64,7 @@ export default function HistoryContent({
                 daily.id
               }
             >
-              <div>카테고리</div>
+              <div>{daily.category.name_kr}</div>
               <div>{daily.content}</div>
               <div>{format(daily.date, "HH:mm")}</div>
               <Amount

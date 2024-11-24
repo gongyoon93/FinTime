@@ -43,6 +43,9 @@ export async function GET(
       orderBy: {
         date: "desc",
       },
+      include: {
+        category: true,
+      },
     });
 
     // 날짜별로 그룹화

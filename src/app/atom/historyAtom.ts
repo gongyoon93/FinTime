@@ -1,5 +1,11 @@
 import { atom } from "recoil";
 
+interface Category {
+  id: number;
+  name_en: string;
+  name_kr: string;
+}
+
 export interface History {
   id: number;
   transaction: string;
@@ -9,6 +15,7 @@ export interface History {
   authorId: number;
   createdAt: Date;
   updatedAt: Date;
+  category: Category;
 }
 
 export interface HistoryList {
