@@ -49,12 +49,4 @@
 
   > 서버 컴포넌트에서 초기 데이터를 로드하고, 클라이언트 컴포넌트에서 URL 쿼리 파라미터의 변경을 감지하여 추가 데이터를 갱신하는 방식으로 사용.
 
-- 전형적인 Next.js 애플리케이션은 요청 Header에 Authorization을 포함시키는 것보다 next-auth 방식이라면 route.ts에서 getToken으로, 서버 컴퍼넌트 layout.tsx에서 getServerSession으로 session 유효성 검사와 필요한 값을 사용할 수 있다.
-
-- 서버와 클라이언트에서 유효성 검사 분리:
-  서버: middleware와 getServerSession으로 세션 유효성 검사.
-  클라이언트: useSession으로 실시간 세션 상태 관리.
-
-- 브라우저의 페이지 요청에서는 next-auth 쿠키가 자동으로 포함되지만, API 요청에서는 클라이언트 측 fetch 함수에서 credentials: "include"를 사용하지 않으면 쿠키가 전송되지 않을 수 있다.
-
 - Prisma에서는 데이터 조회 후 필요한 계산과 그룹화를 JavaScript로 처리한다. Prisma 자체는 데이터베이스 레벨에서의 그룹화, 집계 쿼리를 지원하지만, 복잡한 로직은 데이터베이스 쿼리 후 JavaScript에서 수행하는 편이 더 유연하다.

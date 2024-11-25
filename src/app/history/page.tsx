@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
-import styled from "styled-components";
+import { useCallback, useEffect, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { HistoryList, historyState } from "../atom/historyAtom";
 import { useRecoilState } from "recoil";
 import { getHistoryByUser } from "../lib/history";
@@ -12,11 +12,14 @@ import { signOut } from "next-auth/react";
 import { isValidMonth, isValidYear } from "../lib/date";
 import TranSummary from "../components/history/HistorySummary";
 import HistoryContent from "../components/history/HistoryContent";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
 const HistoryContainer = styled.section`
   width: calc(100% - 2rem);
   height: calc(100% - 7rem);
   margin: 1rem 1rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -25,6 +28,43 @@ const HistoryContainer = styled.section`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const slideUp = keyframes`
+0% {
+  transform: translateY(100%);
+  opacity: 0;
+}
+100% {
+  transform: translateY(0);
+  opacity: 1;
+}
+`;
+
+const SlideOverlay = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 2000;
+  animation: ${slideUp} 0.5s ease-in-out forwards;
+`;
+
+const CreateHistoryBtn = styled(Plus)`
+  bottom: 0;
+  right: 0;
+  width: 3rem;
+  height: 3rem;
+  padding: 1rem;
+  border-radius: 4rem;
+  position: absolute;
+  color: white;
+  background-color: #fe6725;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 `;
 
 interface HistoryPageProps {
@@ -46,6 +86,15 @@ export default function HistoryPage({
   const searchParams = useSearchParams();
   const [history, setHistory] = useRecoilState(historyState);
   const [session, setSession] = useRecoilState(sessionState);
+
+  const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태
+
+  const handleButtonClick = useCallback(() => {
+    setIsAnimating(true); // 애니메이션 시작
+    setTimeout(() => {
+      router.push("/history/write"); // 페이지 이동
+    }, 500); // 애니메이션 지속 시간 이후 이동
+  }, [router, setIsAnimating]);
 
   // 현재 URL의 year/month 파라미터 확인
   const validateAndGetYearMonth = useCallback(() => {
@@ -69,6 +118,8 @@ export default function HistoryPage({
     };
   }, [searchParams, router]);
 
+  // next 14 버전에서는 fetch API를 사용하는 경우 캐싱 기능이 사용된다.
+  // 필요에 따라 axios를 사용하는게 적절하다.
   const fetchHistory = useCallback(
     async (year: string, month: string) => {
       if (!session?.user.id || !session?.user.accessToken) return;
@@ -111,12 +162,17 @@ export default function HistoryPage({
 
   return (
     <>
+      {isAnimating && <SlideOverlay />}
       <TranSummary
         monthlyIncome={history.monthlyIncome}
         monthlyExpense={history.monthlyExpense}
       />
       <HistoryContainer>
         <HistoryContent datelist={history.list} />
+
+        <Link href="/history/write">
+          <CreateHistoryBtn />
+        </Link>
       </HistoryContainer>
     </>
   );
