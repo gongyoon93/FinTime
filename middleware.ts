@@ -9,7 +9,7 @@ import {
 
 // 라우트 그룹 정의
 const ROUTES = {
-  AUTH_REQUIRED: ["/history/:path*", "/myaccount", "/settings"],
+  AUTH_REQUIRED: ["/history", "/myaccount", "/settings"],
   SIGN_IN_ONLY: ["/auth/signup", "/auth/signin"],
   MONTH_PARAM_ROUTES: ["/history"],
 };
