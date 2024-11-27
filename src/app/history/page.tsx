@@ -169,10 +169,7 @@ export default function HistoryPage({
       />
       <HistoryContainer>
         <HistoryContent datelist={history.list} />
-
-        <Link href="/history/write">
-          <CreateHistoryBtn />
-        </Link>
+        <CreateHistoryBtn onClick={handleButtonClick} />
       </HistoryContainer>
     </>
   );
