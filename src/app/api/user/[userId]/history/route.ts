@@ -50,8 +50,8 @@ export async function GET(
 
     // 날짜별로 그룹화
     const groupedByDate = groupBy(userHistories, (history) => {
-      console.log(history.date);
-      console.log(startOfDay(history.date), "yyyy-MM-dd");
+      // console.log(history.date);
+      // console.log(startOfDay(history.date), "yyyy-MM-dd");
       const date = toZonedTime(history.date, timeZone);
       return format(startOfDay(history.date), "yyyy-MM-dd");
     });

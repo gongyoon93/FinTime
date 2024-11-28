@@ -13,7 +13,6 @@ import { isValidMonth, isValidYear } from "../lib/date";
 import TranSummary from "../components/history/HistorySummary";
 import HistoryContent from "../components/history/HistoryContent";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 
 const HistoryContainer = styled.section`
   width: calc(100% - 2rem);
@@ -91,6 +90,7 @@ export default function HistoryPage({
 
   const handleButtonClick = useCallback(() => {
     setIsAnimating(true); // 애니메이션 시작
+    console.log("확인");
     setTimeout(() => {
       router.push("/history/write"); // 페이지 이동
     }, 500); // 애니메이션 지속 시간 이후 이동
