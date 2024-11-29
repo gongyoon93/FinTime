@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { HistoryList, historyState } from "../atom/historyAtom";
@@ -10,7 +10,7 @@ import { Session } from "next-auth";
 import { sessionState } from "../atom/sessionAtom";
 import { signOut } from "next-auth/react";
 import { isValidMonth, isValidYear } from "../lib/date";
-import TranSummary from "../components/history/HistorySummary";
+import HistorySummary from "../components/history/HistorySummary";
 import HistoryContent from "../components/history/HistoryContent";
 import { Plus } from "lucide-react";
 
@@ -82,6 +82,7 @@ export default function HistoryPage({
   expired,
 }: HistoryPageProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [history, setHistory] = useRecoilState(historyState);
   const [session, setSession] = useRecoilState(sessionState);
@@ -89,12 +90,12 @@ export default function HistoryPage({
   const [isAnimating, setIsAnimating] = useState(false); // 애니메이션 상태
 
   const handleButtonClick = useCallback(() => {
-    setIsAnimating(true); // 애니메이션 시작
+    //setIsAnimating(true); // 애니메이션 시작
     console.log("확인");
-    setTimeout(() => {
-      router.push("/history/write"); // 페이지 이동
-    }, 500); // 애니메이션 지속 시간 이후 이동
-  }, [router, setIsAnimating]);
+    //setTimeout(() => {
+    router.push("/history/write"); // 페이지 이동
+    //}, 500); // 애니메이션 지속 시간 이후 이동
+  }, [router]);
 
   // 현재 URL의 year/month 파라미터 확인
   const validateAndGetYearMonth = useCallback(() => {
@@ -104,7 +105,10 @@ export default function HistoryPage({
     const currentMonth = (new Date().getMonth() + 1).toString();
     const month = searchParams?.get("month") ?? currentMonth;
 
-    if (!isValidYear(year) || !isValidMonth(month)) {
+    if (
+      pathname === "/history" &&
+      (!isValidYear(year) || !isValidMonth(month))
+    ) {
       router.replace(
         `/history?year=${isValidYear(year) ? year : currentYear}&month=${
           isValidMonth(month) ? month : currentMonth
@@ -116,7 +120,7 @@ export default function HistoryPage({
       year: isValidYear(year) ? year : currentYear,
       month: isValidMonth(month) ? month : month,
     };
-  }, [searchParams, router]);
+  }, [searchParams, pathname, router]);
 
   // next 14 버전에서는 fetch API를 사용하는 경우 캐싱 기능이 사용된다.
   // 필요에 따라 axios를 사용하는게 적절하다.
@@ -156,14 +160,17 @@ export default function HistoryPage({
 
   // URL 파라미터 변경 감지 및 데이터 fetch
   useEffect(() => {
-    const { year, month } = validateAndGetYearMonth();
-    fetchHistory(year, month);
-  }, [searchParams, validateAndGetYearMonth, fetchHistory]);
+    if (pathname === "/history") {
+      const { year, month } = validateAndGetYearMonth();
+      fetchHistory(year, month);
+      console.log("여기1");
+    }
+  }, [pathname, searchParams, validateAndGetYearMonth, fetchHistory]);
 
   return (
     <>
-      {isAnimating && <SlideOverlay />}
-      <TranSummary
+      {/* {isAnimating && <SlideOverlay />} */}
+      <HistorySummary
         monthlyIncome={history.monthlyIncome}
         monthlyExpense={history.monthlyExpense}
       />

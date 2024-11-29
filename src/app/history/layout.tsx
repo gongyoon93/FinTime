@@ -7,8 +7,10 @@ import { getHistoryByUser } from "../lib/history";
 
 export default async function HistoryLayout({
   searchParams,
+  children,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Record<string, string | string[] | undefined>;
+  children: React.ReactNode;
 }) {
   const currentYear = new Date().getFullYear().toString();
   const currentMonth = (new Date().getMonth() + 1).toString();
@@ -40,14 +42,17 @@ export default async function HistoryLayout({
   );
 
   return (
-    <HistoryPage
-      initialHistories={
-        res.status === 200
-          ? res.data
-          : { monthlyIncome: 0, monthlyExpense: 0, list: [] }
-      }
-      initialSession={session}
-      expired={res.status === 401}
-    />
+    <>
+      <HistoryPage
+        initialHistories={
+          res.status === 200
+            ? res.data
+            : { monthlyIncome: 0, monthlyExpense: 0, list: [] }
+        }
+        initialSession={session}
+        expired={res.status === 401}
+      />
+      {/* {children} */}
+    </>
   );
 }

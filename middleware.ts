@@ -9,7 +9,7 @@ import {
 
 // 라우트 그룹 정의
 const ROUTES = {
-  AUTH_REQUIRED: ["/history", "/myaccount", "/settings"],
+  AUTH_REQUIRED: ["/history", "/history/write", "/myaccount", "/settings"],
   SIGN_IN_ONLY: ["/auth/signup", "/auth/signin"],
   MONTH_PARAM_ROUTES: ["/history"],
 };
@@ -35,22 +35,25 @@ export async function middleware(request: NextRequest) {
     }
 
     // 3. 연도/월 파라미터 라우트 처리
-    if (ROUTES.MONTH_PARAM_ROUTES.some((route) => pathname.startsWith(route))) {
+    if (
+      ROUTES.MONTH_PARAM_ROUTES.some((route) => pathname.startsWith(route)) &&
+      pathname !== "/history/write"
+    ) {
       const year = searchParams.get("year");
       const month = searchParams.get("month");
 
       // 연도 파라미터가 유효하지 않은 경우 처리
-      if (isValidYear(year) || isValidMonth(month)) {
+      if (!isValidYear(year) || !isValidMonth(month)) {
         const currentYear = getCurrentYear();
         const currentMonth = getCurrentMonth();
         const url = new URL(request.url);
 
-        if (isValidYear(year)) {
+        if (!isValidYear(year)) {
           // 연도 파라미터 업데이트
           url.searchParams.set("year", currentYear);
         }
 
-        if (isValidMonth(month)) {
+        if (!isValidMonth(month)) {
           // 월 파라미터 업데이트
           url.searchParams.set("month", currentMonth);
         }
