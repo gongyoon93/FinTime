@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const PageContainer = styled.div`
@@ -85,6 +87,10 @@ const ContinueButton = styled(SaveButton)`
 `;
 
 export default function WritePage() {
+  const router = useRouter();
+  useEffect(() => {
+    console.log("write page 초기 로딩 이후");
+  }, [router]);
   return (
     <PageContainer>
       <TabContainer>
