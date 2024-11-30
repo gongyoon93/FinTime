@@ -6,8 +6,10 @@ import { getHistoryByUser } from "../lib/history";
 // export const dynamic = "force-dynamic";
 
 export default async function HistoryLayout({
+  children,
   searchParams,
 }: {
+  children: React.ReactNode;
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const currentYear = new Date().getFullYear().toString();
