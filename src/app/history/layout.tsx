@@ -7,10 +7,8 @@ import { getHistoryByUser } from "../lib/history";
 
 export default async function HistoryLayout({
   searchParams,
-  children,
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
-  children: React.ReactNode;
 }) {
   const currentYear = new Date().getFullYear().toString();
   const currentMonth = (new Date().getMonth() + 1).toString();
@@ -52,7 +50,6 @@ export default async function HistoryLayout({
         initialSession={session}
         expired={res.status === 401}
       />
-      {/* {children} */}
     </>
   );
 }
