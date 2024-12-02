@@ -52,4 +52,5 @@
 - Prisma에서는 데이터 조회 후 필요한 계산과 그룹화를 JavaScript로 처리한다. Prisma 자체는 데이터베이스 레벨에서의 그룹화, 집계 쿼리를 지원하지만, 복잡한 로직은 데이터베이스 쿼리 후 JavaScript에서 수행하는 편이 더 유연하다.
 
 - styled-components code를 분리하고 초기 fetch를 제거? > 이 상태에 대한 개선된 점 확인
-  - css in js인 styled-components를 tailwind를 변경할지?(현업에서 많이 사용하고 업데이트가 잘되는지)
+
+* css in js인 styled-components를 tailwind를 변경할지?(현업에서 많이 사용하고 업데이트가 잘되는지)
