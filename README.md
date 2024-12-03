@@ -51,6 +51,4 @@
 
 - Prisma에서는 데이터 조회 후 필요한 계산과 그룹화를 JavaScript로 처리한다. Prisma 자체는 데이터베이스 레벨에서의 그룹화, 집계 쿼리를 지원하지만, 복잡한 로직은 데이터베이스 쿼리 후 JavaScript에서 수행하는 편이 더 유연하다.
 
-- styled-components code를 분리하고 초기 fetch를 제거? > 이 상태에 대한 개선된 점 확인
-
-* css in js인 styled-components를 tailwind를 변경할지?(현업에서 많이 사용하고 업데이트가 잘되는지)
+- hitory와 history/write 두개의 폴더 구조를 같이 사용할 때 url에 맞는 필요한 페이지 컴포넌트를 렌더링 하기 위해서 history/layout.tsx에 children prop을 전달해야한다. 이에 앞서 초기 값을 전달하기 위해 fetch api와 특정 컴포넌트를 명시적으로 사용하고 있었다. 그러므로 children prop으로 두개의 컴포넌트를 경로에 맞게 사용하기 위해서 방법을 고안한다.
