@@ -73,13 +73,11 @@ interface HistoryPageProps {
     list: HistoryList[];
   };
   initialSession: Session | null;
-  expired: boolean;
 }
 
 export default function HistoryPage({
   initialHistories,
   initialSession,
-  expired,
 }: HistoryPageProps) {
   const router = useRouter();
   const pathname = usePathname();
