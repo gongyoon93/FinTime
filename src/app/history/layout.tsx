@@ -40,6 +40,8 @@ export default async function HistoryLayout({
     Number(month)
   );
 
+  console.log("layout의 확인");
+
   return (
     <>
       <HistoryPage
