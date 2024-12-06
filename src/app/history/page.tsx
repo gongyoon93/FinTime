@@ -89,7 +89,7 @@ export default function HistoryPage({
 
   const handleButtonClick = useCallback(() => {
     //setIsAnimating(true); // 애니메이션 시작
-    console.log("확인");
+    console.log("router push 확인");
     //setTimeout(() => {
     router.push("/history/write"); // 페이지 이동
     //}, 500); // 애니메이션 지속 시간 이후 이동
