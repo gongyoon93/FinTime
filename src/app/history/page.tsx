@@ -161,7 +161,6 @@ export default function HistoryPage({
     if (pathname === "/history") {
       const { year, month } = validateAndGetYearMonth();
       fetchHistory(year, month);
-      console.log("useEffect 통과");
     }
   }, [pathname, searchParams, validateAndGetYearMonth, fetchHistory]);
 
