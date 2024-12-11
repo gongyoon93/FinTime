@@ -88,9 +88,7 @@ const ContinueButton = styled(SaveButton)`
 
 export default function WritePage() {
   const router = useRouter();
-  useEffect(() => {
-    console.log("WritePage의 확인");
-  }, [router]);
+  useEffect(() => {}, [router]);
   return (
     <PageContainer>
       <TabContainer>
