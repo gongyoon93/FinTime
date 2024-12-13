@@ -23,30 +23,43 @@ export const authOptions: NextAuthOptions = {
       },
       //credentials : 로그인 폼에서 입력한 값
       async authorize(credentials) {
-        //로그인 로직
-        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/signin`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: credentials?.username,
-            password: credentials?.password,
-          }),
-        });
-        const user = await res.json();
-        // console.log("$$$user: ", user);
+        if (!credentials?.username || !credentials?.password) {
+          throw new Error("이메일과 비밀번호를 입력해 주세요.");
+        }
 
-        if (user) {
-          return user;
-        } else {
-          return null;
+        try {
+          //로그인 로직
+          const res = await fetch(`${process.env.NEXTAUTH_URL}/api/signin`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: credentials?.username,
+              password: credentials?.password,
+            }),
+          });
+
+          if (!res.ok) {
+            throw new Error(
+              "로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요."
+            );
+          }
+
+          const user = await res.json();
+          // console.log("$$$user: ", user);
+          return user || null;
+        } catch (error) {
+          console.error("Authorize Error:", error);
+          throw new Error("로그인에 문제가 발생했습니다.");
         }
       },
     }),
   ],
   session: {
-    // maxAge: 1 * 1 * 40,
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60,
+    updateAge: 12 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -63,8 +76,6 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
     signOut: "/auth/signout",
     error: "/auth/error",
-    verifyRequest: "/auth/verify-request",
-    newUser: "/auth/new-user",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
