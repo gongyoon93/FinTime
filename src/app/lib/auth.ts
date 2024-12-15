@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
           return user || null;
         } catch (error) {
           console.error("Authorize Error:", error);
-          throw new Error("로그인에 문제가 발생했습니다.");
+          throw new Error("로그인 문제가 발생했습니다.");
         }
       },
     }),
