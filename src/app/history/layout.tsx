@@ -21,9 +21,6 @@ export default async function HistoryLayout({
 
   const session = await getServerSession(authOptions);
 
-  // console.log("layout의 searchParams", searchParams);
-  // console.log("layout의 month", month);
-
   if (!session?.user.id || !session?.user.accessToken) {
     return (
       <HistoryPage
@@ -39,8 +36,6 @@ export default async function HistoryLayout({
     Number(year),
     Number(month)
   );
-
-  console.log("layout의 확인");
 
   return (
     <>
