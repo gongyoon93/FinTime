@@ -8,7 +8,6 @@ import { verifyJwt } from "./jwt";
 //next-auth 옵션
 export const authOptions: NextAuthOptions = {
   providers: [
-    // ID, PW 로그인 방식
     // CredentiasProvider의 authorize함수를 통해
     // /api/auth/signin의 endpoint를 호출해 동작.
     CredentialsProvider({
