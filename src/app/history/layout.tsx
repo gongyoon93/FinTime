@@ -50,6 +50,3 @@ export default async function HistoryLayout({
     </>
   );
 }
-
-//styled-components code를 분리하고 초기 fetch를 제거? > 이 상태에 대한 개선된 점 확인
-// + css in js인 styled-components를 tailwind를 변경할지?(현업에서 많이 사용하고 업데이트가 잘되는지)
