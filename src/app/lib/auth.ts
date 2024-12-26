@@ -46,7 +46,6 @@ export const authOptions: NextAuthOptions = {
           }
 
           const user = await res.json();
-          // console.log("$$$user: ", user);
           return user || null;
         } catch (error) {
           console.error("Authorize Error:", error);
