@@ -27,7 +27,6 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          //로그인 로직
           const res = await fetch(`${process.env.NEXTAUTH_URL}/api/signin`, {
             method: "POST",
             headers: {
